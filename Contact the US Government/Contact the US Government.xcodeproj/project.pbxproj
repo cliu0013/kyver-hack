@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		31B70193F3E1D7E3BA200FF0 /* Pods_Contact_the_US_Government.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6152437C454BF377D553DCB4 /* Pods_Contact_the_US_Government.framework */; };
+		8E7D25BC21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BB21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift */; };
+		8E7D25BE21AF1E1F00768A73 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */; };
+		8E7D25C021AF1E5F00768A73 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BF21AF1E5E00768A73 /* Filter.swift */; };
 		D65F994621AC71D7007F1545 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F994521AC71D7007F1545 /* AppDelegate.swift */; };
 		D65F994821AC71D7007F1545 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F994721AC71D7007F1545 /* ViewController.swift */; };
 		D65F994B21AC71D7007F1545 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D65F994921AC71D7007F1545 /* Main.storyboard */; };
@@ -25,6 +28,9 @@
 		2A3C0CC315FB5FEAA1A26724 /* Pods-Contact the US Government.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contact the US Government.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Contact the US Government/Pods-Contact the US Government.debug.xcconfig"; sourceTree = "<group>"; };
 		40DEBE7D6D0417926200CFE7 /* Pods-Contact the US Government.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contact the US Government.release.xcconfig"; path = "Pods/Target Support Files/Pods-Contact the US Government/Pods-Contact the US Government.release.xcconfig"; sourceTree = "<group>"; };
 		6152437C454BF377D553DCB4 /* Pods_Contact_the_US_Government.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Contact_the_US_Government.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E7D25BB21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
+		8E7D25BF21AF1E5E00768A73 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		D65F994221AC71D7007F1545 /* Contact the US Government.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contact the US Government.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D65F994521AC71D7007F1545 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D65F994721AC71D7007F1545 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +123,9 @@
 			children = (
 				D65F995921ACE455007F1545 /* LegislativeNavViewController.swift */,
 				D65F995721AC7B25007F1545 /* FilterModalViewController.swift */,
+				8E7D25BF21AF1E5E00768A73 /* Filter.swift */,
+				8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */,
+				8E7D25BB21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift */,
 				D65F996521AD1F6C007F1545 /* TableViewCells.swift */,
 			);
 			path = "Legislative Branch";
@@ -260,7 +269,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E7D25BE21AF1E1F00768A73 /* FilterCollectionViewCell.swift in Sources */,
 				D65F994821AC71D7007F1545 /* ViewController.swift in Sources */,
+				8E7D25C021AF1E5F00768A73 /* Filter.swift in Sources */,
 				D65F996A21ADE11D007F1545 /* RepresentativeViewController.swift in Sources */,
 				D65F996621AD1F6C007F1545 /* TableViewCells.swift in Sources */,
 				D65F994621AC71D7007F1545 /* AppDelegate.swift in Sources */,
@@ -268,6 +279,7 @@
 				D65F995A21ACE455007F1545 /* LegislativeNavViewController.swift in Sources */,
 				D65F996421AD0F48007F1545 /* Governors.swift in Sources */,
 				D65F995821AC7B25007F1545 /* FilterModalViewController.swift in Sources */,
+				8E7D25BC21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
