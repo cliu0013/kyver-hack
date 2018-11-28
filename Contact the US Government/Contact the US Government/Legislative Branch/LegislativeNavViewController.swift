@@ -82,7 +82,10 @@ class LegislativeNavViewController: UITableViewController{
     
     @objc func presentFilterModalViewController(){
         let modalViewController = FilterModalViewController()
+        modalViewController.modalPresentationStyle = .custom
+        modalViewController.transitioningDelegate = self
         present(modalViewController, animated: true, completion: nil)
+        
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -152,4 +155,26 @@ class LegislativeNavViewController: UITableViewController{
         }
     }
 
+    func reloadTable(){
+        tableView.reloadData()
+    }
+    
 }
+extension LegislativeNavViewController : UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}
+
+class HalfSizePresentationController : UIPresentationController {
+    override var frameOfPresentedViewInContainerView: CGRect {
+        get {
+            guard let theView = containerView else {
+                return CGRect.zero
+            }
+            
+            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/8, width: theView.bounds.width, height: theView.bounds.height/8)
+        }
+    }
+}
+
