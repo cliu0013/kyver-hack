@@ -28,6 +28,7 @@ class LegislativeNavViewController: UITableViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("test commit")
         view.backgroundColor = .white
         navigationItem.title = "Legislative Branch"
         navigationController?.navigationBar.prefersLargeTitles = true
