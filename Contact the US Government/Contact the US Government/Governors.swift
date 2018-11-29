@@ -7,7 +7,8 @@
 //
 
 import Foundation
-struct Senator: Codable {
+
+class Senator: Codable {
     var state: String
     var _class: String
     var name: String
@@ -16,9 +17,29 @@ struct Senator: Codable {
     var phone: String
     var website: String
     var email: String
+    
+    init(state: String, _class: String, name: String, party: String, officeRoom: String, phone: String, website: String, email: String) {
+        self.state = state
+        self._class = _class
+        self.name = name
+        self.party = party
+        self.officeRoom = officeRoom
+        self.phone = phone
+        self.website = website
+        self.email = email
+    }
+    
+    func convertToPartyType(party : String) -> PartyType {
+        if (party == "Republican"){
+            return .Republican
+        }
+        else {
+            return .Democrat
+        }
+    }
 }
 
-struct Representative: Codable {
+class Representative: Codable {
     var state: String
     var name: String
     var party: String
@@ -27,4 +48,27 @@ struct Representative: Codable {
     var phone: String
     var website: String
     var email: String
+    
+    init(state: String, name: String, party: String, district: String, officeRoom: String, phone: String, website: String, email: String) {
+        self.state = state
+        self.name = name
+        self.party = party
+        self.district = district
+        self.officeRoom = officeRoom
+        self.phone = phone
+        self.website = website
+        self.email = email
+    }
+    
+    func convertToPartyType(party : String) -> PartyType {
+        if (party == "Republican"){
+            return .Republican
+        }
+        else {
+            return .Democrat
+        }
+    }
+    
 }
+
+

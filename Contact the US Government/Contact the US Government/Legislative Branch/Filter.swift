@@ -8,10 +8,34 @@
 
 import UIKit
 
-class Filter{
-    var name: String
-    init(name: String) {
-        self.name = name
+protocol Filter {
+    var filterTitle: String { get }
+}
+
+enum PartyType: Filter {
+    case Democrat
+    case Republican
+    
+    
+    var filterTitle: String {
+        return String(describing: self).localizedUppercase
+    }
+    
+    static func allValues() -> [PartyType] {
+        return [.Democrat, .Republican]
     }
 }
 
+enum Type1: Filter {
+    case filter1
+    case filter2
+    case filter3
+    
+    var filterTitle: String {
+        return String(describing: self).localizedUppercase
+    }
+    
+    static func allValues() -> [Type1] {
+        return [.filter1, .filter2, .filter3]
+    }
+}

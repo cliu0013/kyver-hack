@@ -25,16 +25,16 @@ class LegislativeNavViewController: UITableViewController{
     var representatives: [Representative]!
     var senators: [Senator]!
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("test commit")
         view.backgroundColor = .white
         navigationItem.title = "Legislative Branch"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = gloryRed
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
+        edgesForExtendedLayout = [] // gets rid of views going under navigation controller
         
         setupNavBarItems()
         
@@ -43,15 +43,15 @@ class LegislativeNavViewController: UITableViewController{
         tableView.register(RepresentativesTableViewCell.self, forCellReuseIdentifier: RepCellId)
         tableView.register(SenatorsTableViewCell.self, forCellReuseIdentifier: SenCellId)
         tableView.sectionHeaderHeight = 50
-    
-        let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "R", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
-        let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "R", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
+        let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
+        
+        let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
         representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
         senators = [alexander, alexander, alexander, alexander, alexander]
     }
-
+    
     
     func setupNavBarItems(){
         let image = UIImage(named: "Congress")
@@ -72,7 +72,7 @@ class LegislativeNavViewController: UITableViewController{
         filterButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         filterButton.tintColor = .white
         filterButton.addTarget(self, action: #selector(presentFilterModalViewController), for: .touchUpInside)
-       
+        
         navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: filterButton),UIBarButtonItem(customView: searchButton) ]
     }
     
@@ -123,7 +123,7 @@ class LegislativeNavViewController: UITableViewController{
             cell.selectionStyle = .none
             cell.backgroundColor = .white
             cell.textLabel?.numberOfLines = 0
-           
+            
             
             return cell
         } else{
@@ -154,7 +154,7 @@ class LegislativeNavViewController: UITableViewController{
             navigationController?.pushViewController(navViewController, animated: true)
         }
     }
-
+    
     func reloadTable(){
         tableView.reloadData()
     }
@@ -177,4 +177,3 @@ class HalfSizePresentationController : UIPresentationController {
         }
     }
 }
-

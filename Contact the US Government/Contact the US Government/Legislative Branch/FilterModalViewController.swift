@@ -8,22 +8,35 @@
 
 import UIKit
 
-class FilterModalViewController: UIViewController {
+class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource {
     
     let padding: CGFloat = 50
     let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
     let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
     let filterReuseIdentifier: String = "FilterCollectionViewCell"
-    var refreshControl: UIRefreshControl!
-    //var filtersArray: [Filter]!
+    
+    var filtersArray: [Filter] = []
+    var activePartyTypeFilter: Set<PartyType> = []
+    var activeType1Filter: Set<Type1> = []
+    var activeSenators : [Senator] = []
+    var activeRepresentatives : [Representative] = []
+    var senators : [Senator] = []
+    var representatives : [Representative] = []
     
     var filterView: UICollectionView!
     var confirmationButton: UIButton!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = gloryRed
+        edgesForExtendedLayout = [] // gets rid of views going under navigation controller
+        
+        //        senators = LegislativeNavViewController.senators
+        //        activeSenators = senators
+        //        representatives = LegislativeNavViewController.representatives
+        //        activeRepresentatives = representatives
+        
+        
         
         confirmationButton = UIButton()
         confirmationButton.translatesAutoresizingMaskIntoConstraints = false
@@ -31,10 +44,13 @@ class FilterModalViewController: UIViewController {
         confirmationButton.addTarget(self, action: #selector(dismissFilterModalViewControllerAndSaveOptions), for: .touchUpInside)
         view.addSubview(confirmationButton)
         
+        filtersArray.append(contentsOf: PartyType.allValues().map({ f in f as Filter }))
+        filtersArray.append(contentsOf: Type1.allValues().map({ f in f as Filter }))
+        
         filterView = UICollectionView(frame: .zero, collectionViewLayout: FilterCollectionViewFlowLayout())
         filterView.translatesAutoresizingMaskIntoConstraints = false
-        //        filterView.delegate = self
-        //        filterView.dataSource = self
+        filterView.delegate = self
+        filterView.dataSource = self
         filterView.register(FilterCollectionViewCell.self, forCellWithReuseIdentifier: filterReuseIdentifier)
         filterView.showsHorizontalScrollIndicator = false
         filterView.backgroundColor = gloryBlue
@@ -48,10 +64,10 @@ class FilterModalViewController: UIViewController {
     
     func setupConstraints(){
         NSLayoutConstraint.activate([
-            confirmationButton.widthAnchor.constraint(equalToConstant: 100),
-            confirmationButton.heightAnchor.constraint(equalToConstant: 100),
-            confirmationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: padding * -1.0),
-            confirmationButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding * -1.0)
+            confirmationButton.widthAnchor.constraint(equalToConstant: 50),
+            confirmationButton.heightAnchor.constraint(equalToConstant: 50),
+            confirmationButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding * -1.25),
+            confirmationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
         
         NSLayoutConstraint.activate([
@@ -59,21 +75,113 @@ class FilterModalViewController: UIViewController {
             filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             filterView.bottomAnchor.constraint(equalTo: view.bottomAnchor,  constant: padding * -0.3),
             filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            
             ])
     }
     
     @objc func dismissFilterModalViewControllerAndSaveOptions(){
-            dismiss(animated: true, completion: nil)
+        
+        dismiss(animated: true, completion: nil)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return filtersArray.count
     }
-    */
-
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return UICollectionViewCell() }
+        let filter = filtersArray[indexPath.item]
+        cell.setup(with: filter.filterTitle)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return }
+        let currentFilter = filtersArray[indexPath.item]
+        changeFilter(filter: currentFilter, shouldRemove: false)
+        //       Code fo
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return }
+        let currentFilter = filtersArray[indexPath.item]
+        changeFilter(filter: currentFilter, shouldRemove: true)
+        //        displayDelegatesCollectionView.reloadData()
+        
+    }
+    
+    func changeFilter(filter: Filter, shouldRemove: Bool = false) {
+        if let partyType = filter as? PartyType {
+            if shouldRemove {
+                activePartyTypeFilter.remove(partyType)
+            } else {
+                activePartyTypeFilter.insert(partyType)
+            }
+        }
+        if let type1 = filter as? Type1 {
+            if shouldRemove {
+                activeType1Filter.remove(type1)
+            } else {
+                activeType1Filter.insert(type1)
+            }
+        }
+        
+        filterSenators()
+        filterRepresentatives()
+    }
+    
+    func filterSenators() {
+        if activePartyTypeFilter.count == 0 && activeType1Filter.count == 0{
+            activeSenators = senators
+            return
+        }
+        activeSenators = senators.filter({ s in
+            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+            if activePartyTypeFilter.count > 0 {
+                if activePartyTypeFilter.contains(s.convertToPartyType(party: s.party)) {
+                    partyTypeFilteredOut = false
+                }
+            }
+            
+            //            var Type1FilteredOut = activeType1Filter.count > 0
+            //            if activeType1Filter.count > 0 {
+            //                for Type2 in r.type1 {
+            //                    if activeType1Filter.contains(Type1) {
+            //                        Type1FilteredOut = false
+            //                    }
+            //                }
+            //            }
+            return !partyTypeFilteredOut
+        })
+    }
+    
+    func filterRepresentatives() {
+        if activePartyTypeFilter.count == 0 && activeType1Filter.count == 0{
+            activeRepresentatives = representatives
+            return
+        }
+        activeRepresentatives = representatives.filter({ r in
+            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+            if activePartyTypeFilter.count > 0 {
+                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                    partyTypeFilteredOut = false
+                }
+            }
+            
+            //            var Type1FilteredOut = activeType1Filter.count > 0
+            //            if activeType1Filter.count > 0 {
+            //                for Type2 in r.type1 {
+            //                    if activeType1Filter.contains(Type1) {
+            //                        Type1FilteredOut = false
+            //                    }
+            //                }
+            //            }
+            return !partyTypeFilteredOut
+        })
+    }
+    
+    
+    
 }

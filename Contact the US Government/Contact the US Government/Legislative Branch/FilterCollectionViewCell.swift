@@ -9,43 +9,39 @@
 import UIKit
 
 class FilterCollectionViewCell: UICollectionViewCell {
-    var nameLabel: UILabel!
+    var filterLabel: UILabel!
+    var unselectedColor: UIColor = .lightGray
+    var selectedColor: UIColor = .blue
     
-    let padding: CGFloat = 8
-    let labelHeight: CGFloat = 28
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.black.cgColor
-        
-        
-        nameLabel = UILabel()
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = UIFont.systemFont(ofSize: 10)
-        
-        contentView.addSubview(nameLabel)
+        filterLabel = UILabel(frame: bounds)
+        filterLabel.textAlignment = .center
+        filterLabel.font = .systemFont(ofSize: 14)
+        filterLabel.textColor = .blue
+        layer.cornerRadius = 5
+        backgroundColor = .lightGray
+        contentView.addSubview(filterLabel)
+        isSelected = false
     }
     
-    override func updateConstraints() {
-        
-        NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 2),
-            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            nameLabel.heightAnchor.constraint(equalToConstant: labelHeight),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 50)
-            ])
-        
-        super.updateConstraints()
+    func setup(with title: String) {
+        filterLabel.text = title
     }
     
-    func configure(for filter: Filter) {
-        nameLabel.text = filter.name
-        
-    }
-    
-    func configure(for filter: Filter, color : UIColor) {
-        nameLabel.text = filter.name
-        contentView.backgroundColor = color
+    //when a cell is selected, we change the background / text color here to reflect the selected
+    override var isSelected: Bool {
+        didSet {
+            super.isSelected = isSelected
+            if isSelected {
+                backgroundColor = selectedColor
+                filterLabel.textColor = unselectedColor
+            } else {
+                backgroundColor = unselectedColor
+                filterLabel.textColor = selectedColor
+            }
+            setNeedsDisplay()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
