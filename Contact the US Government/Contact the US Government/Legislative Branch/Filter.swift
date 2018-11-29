@@ -18,7 +18,7 @@ enum PartyType: Filter {
     
     
     var filterTitle: String {
-        return String(describing: self).localizedUppercase
+        return String(describing: self)
     }
     
     static func allValues() -> [PartyType] {
@@ -32,7 +32,7 @@ enum Type1: Filter {
     case filter3
     
     var filterTitle: String {
-        return String(describing: self).localizedUppercase
+        return String(describing: self)
     }
     
     static func allValues() -> [Type1] {

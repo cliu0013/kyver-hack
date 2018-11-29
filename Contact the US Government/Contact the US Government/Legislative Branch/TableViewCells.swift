@@ -17,8 +17,8 @@ class SenatorsTableViewCell: UITableViewCell {
     var attrs = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16.0), NSAttributedString.Key.foregroundColor: UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0), NSAttributedString.Key.underlineStyle: 1] as [NSAttributedString.Key : Any]
     
     var attributedString = NSMutableAttributedString(string:"")
-
- 
+    
+    
     
     let padding: CGFloat = 10
     let nameLabelHeight: CGFloat = 25
@@ -61,7 +61,7 @@ class SenatorsTableViewCell: UITableViewCell {
         contentView.addSubview(stateandpartyLabel)
         contentView.addSubview(nameLabel)
         contentView.addSubview(detailsButton)
-
+        
         updateConstraints()
         
     }
@@ -205,5 +205,57 @@ class RepresentativesTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }
+
+class StateTableViewCell: UITableViewCell {
+    var nameLabel: UILabel!
+    var attrs = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16.0), NSAttributedString.Key.foregroundColor: UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0), NSAttributedString.Key.underlineStyle: 1] as [NSAttributedString.Key : Any]
+    
+    var attributedString = NSMutableAttributedString(string:"")
+    
+    let padding: CGFloat = 10
+    let nameLabelHeight: CGFloat = 25
+    let nameFont = UIFont(name: ".SFUIText-Medium", size: 25)
+    let contentFont = UIFont(name: ".SFUIText-Medium", size: 16)
+    let gloryBlue = UIColor.init(red: 0, green: 40.0/255, blue: 104.0/255, alpha: 1.0)
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        // TODO: Instantiate labels and imageView
+        nameLabel = UILabel()
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = nameFont
+        nameLabel.textAlignment = .left
+        nameLabel.textColor = .black
+        nameLabel.numberOfLines = 0
+        contentView.addSubview(nameLabel)
+        
+        
+        updateConstraints()
+        
+    }
+    
+    override func updateConstraints() {
+        NSLayoutConstraint.activate([
+            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            nameLabel.heightAnchor.constraint(equalToConstant: nameLabelHeight)
+            
+            
+            ])
+        super.updateConstraints()
+        
+    }
+    
+    func configure(for state: String){
+        nameLabel.text = state
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+

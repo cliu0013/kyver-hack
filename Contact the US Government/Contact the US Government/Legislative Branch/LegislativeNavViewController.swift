@@ -54,26 +54,13 @@ class LegislativeNavViewController: UITableViewController{
     
     
     func setupNavBarItems(){
-        let image = UIImage(named: "Congress")
-        let imageView = UIImageView(image: image)
-        imageView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        imageView.contentMode = .scaleAspectFit
-        
-        navigationItem.titleView = imageView
-        
-        let searchButton = UIButton(type: .system)
-        searchButton.setTitle("Search", for: .normal)
-        searchButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        searchButton.tintColor = .white
-        searchButton.addTarget(self, action: #selector(handleSearch), for: .touchUpInside)
-        
         let filterButton = UIButton(type: .system)
         filterButton.setTitle("Filter", for: .normal)
         filterButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         filterButton.tintColor = .white
         filterButton.addTarget(self, action: #selector(presentFilterModalViewController), for: .touchUpInside)
         
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: filterButton),UIBarButtonItem(customView: searchButton) ]
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: filterButton) ]
     }
     
     @objc func handleSearch(){
@@ -173,7 +160,8 @@ class HalfSizePresentationController : UIPresentationController {
                 return CGRect.zero
             }
             
-            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/8, width: theView.bounds.width, height: theView.bounds.height/8)
+            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
+            //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
         }
     }
 }

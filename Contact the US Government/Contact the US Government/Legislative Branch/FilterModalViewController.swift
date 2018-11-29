@@ -8,7 +8,10 @@
 
 import UIKit
 
-class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource {
+class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource{
+    
+    
+    
     
     let padding: CGFloat = 50
     let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
@@ -25,6 +28,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     
     var filterView: UICollectionView!
     var confirmationButton: UIButton!
+    var statesButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +61,19 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         filterView.allowsMultipleSelection = true //this is how we select multiple cells at once
         view.addSubview(filterView)
         
+        statesButton = UIButton()
+        statesButton.translatesAutoresizingMaskIntoConstraints = false
+        statesButton.backgroundColor = .white
+        statesButton.setTitle("Choose State", for: .normal)
+        statesButton.addTarget(self, action: #selector(presentStatesPopupModalViewController), for: .touchUpInside)
+        statesButton.contentHorizontalAlignment = .center
+        statesButton.titleLabel?.font =  .systemFont(ofSize: 15)
+        statesButton.layer.cornerRadius = 5
+        statesButton.setTitleColor(.darkGray, for: .normal)
+        view.addSubview(statesButton)
+        
+        
+        
         setupConstraints()
         
         // Do any additional setup after loading the view.
@@ -66,23 +83,37 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         NSLayoutConstraint.activate([
             confirmationButton.widthAnchor.constraint(equalToConstant: 50),
             confirmationButton.heightAnchor.constraint(equalToConstant: 50),
-            confirmationButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: padding * -1.25),
+            confirmationButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 1),
             confirmationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             ])
         
         NSLayoutConstraint.activate([
             filterView.heightAnchor.constraint(equalToConstant: 50),
             filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            filterView.bottomAnchor.constraint(equalTo: view.bottomAnchor,  constant: padding * -0.3),
+            filterView.topAnchor.constraint(equalTo: statesButton.bottomAnchor, constant: 1),
             filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            
             ])
+        NSLayoutConstraint.activate([
+            statesButton.heightAnchor.constraint(equalToConstant: 30),
+            statesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            statesButton.topAnchor.constraint(equalTo:  confirmationButton.bottomAnchor, constant: 1),
+            statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: padding * -1),
+            ])
+        
+        
     }
     
     @objc func dismissFilterModalViewControllerAndSaveOptions(){
-        
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func presentStatesPopupModalViewController(){
+        let modalViewController = StatesPopopModalViewController()
+        modalViewController.modalPresentationStyle = .custom
+        modalViewController.transitioningDelegate = self
+        modalViewController.modalTransitionStyle = .crossDissolve
+        present(modalViewController, animated: true, completion: nil)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -96,6 +127,8 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         return cell
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return }
         let currentFilter = filtersArray[indexPath.item]
@@ -104,12 +137,10 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return }
         let currentFilter = filtersArray[indexPath.item]
         changeFilter(filter: currentFilter, shouldRemove: true)
         //        displayDelegatesCollectionView.reloadData()
-        
     }
     
     func changeFilter(filter: Filter, shouldRemove: Bool = false) {
@@ -181,7 +212,23 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
             return !partyTypeFilteredOut
         })
     }
-    
-    
-    
+}
+extension FilterModalViewController : UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return PopupPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}
+
+class PopupPresentationController : UIPresentationController {
+    override var frameOfPresentedViewInContainerView: CGRect {
+        get {
+            guard let theView = containerView else {
+                return CGRect.zero
+            }
+            let viewBoundaries = CGRect(x: theView.bounds.width/6, y: theView.bounds.height/5, width: (2*theView.bounds.width)/3, height: (1*theView.bounds.height)/2)
+            //viewBoundaries.
+            return viewBoundaries
+            //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
+        }
+    }
 }
