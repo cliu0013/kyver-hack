@@ -105,10 +105,11 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        super.touchesEnded(touches , with: event)
         if touches.first?.view?.tag == 10{
             print("ran")
             dismiss(animated: true, completion: nil)
-            super.touchesEnded(touches , with: event)
+            
         }
     }
     

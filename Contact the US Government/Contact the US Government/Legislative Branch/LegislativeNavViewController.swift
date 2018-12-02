@@ -154,6 +154,7 @@ extension LegislativeNavViewController : UIViewControllerTransitioningDelegate {
     }
 }
 
+
 class HalfSizePresentationController : UIPresentationController {
     
     override var frameOfPresentedViewInContainerView: CGRect {
@@ -161,7 +162,8 @@ class HalfSizePresentationController : UIPresentationController {
             guard let theView = containerView else {
                 return CGRect.zero
             }
-            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
+//            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
+            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/3, width: theView.bounds.width, height: theView.bounds.height/3)
             //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
         }
     }

@@ -7,7 +7,12 @@
 //
 
 import UIKit
-
+protocol StateDelegate: class {
+    func stateChanged(newState: String)
+}
+protocol DismissDelegate: class {
+    func undim()
+}
 class SenateNavViewController: UITableViewController{
     
     let padding: CGFloat = 30
@@ -92,7 +97,9 @@ class SenateNavViewController: UITableViewController{
         let modalViewController = FilterModalViewController()
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self
+        modalViewController.dismissDelegate = self
         present(modalViewController, animated: true, completion: nil)
+        
         blurEffectView.isHidden = false
     }
     
@@ -178,6 +185,19 @@ extension SenateNavViewController: UISearchResultsUpdating {
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
         // TODO
+    }
+}
+extension SenateNavViewController: StateDelegate{
+    func stateChanged(newState: String) {
+        //TODO Filter that state
+        print("TODO later")
+    }
+}
+
+extension SenateNavViewController: DismissDelegate{
+    func undim() {
+        blurEffectView.isHidden = true
+        print("should undim")
     }
 }
 

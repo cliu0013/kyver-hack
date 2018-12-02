@@ -8,15 +8,34 @@
 
 import UIKit
 
-protocol StateDelegate: class {
-    func stateChanged(newState: String)
-}
-class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource{
+
+class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate{
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return states.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("Pressed")
+        let state = states[row]
+        delegate?.stateChanged(newState: state)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        let state = states[row]
+        return state
+    }
     
     let padding: CGFloat = 50
     let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
     let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
     let filterReuseIdentifier: String = "FilterCollectionViewCell"
+    var pickerView: UIPickerView!
+    var states : [String] = []
     
     var filtersArray: [Filter] = []
     var activePartyTypeFilter: Set<PartyType> = []
@@ -30,6 +49,9 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     var confirmationButton: UIButton!
     var statesButton: UIButton!
     var dimView : UIView!
+    weak var delegate: StateDelegate?
+    weak var dismissDelegate: DismissDelegate?
+    weak var repDismissDelegate: RepDismissDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,22 +84,40 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         filterView.allowsMultipleSelection = true //this is how we select multiple cells at once
         view.addSubview(filterView)
         
-        statesButton = UIButton()
-        statesButton.translatesAutoresizingMaskIntoConstraints = false
-        statesButton.backgroundColor = .white
-        statesButton.setTitle("Choose State", for: .normal)
-        statesButton.addTarget(self, action: #selector(presentStatesPopupModalViewController), for: .touchUpInside)
-        statesButton.contentHorizontalAlignment = .center
-        statesButton.titleLabel?.font =  .systemFont(ofSize: 15)
-        statesButton.layer.cornerRadius = 5
-        statesButton.setTitleColor(.darkGray, for: .normal)
-        view.addSubview(statesButton)
+//        statesButton = UIButton()
+//        statesButton.translatesAutoresizingMaskIntoConstraints = false
+//        statesButton.backgroundColor = .white
+//        statesButton.setTitle("Choose State", for: .normal)
+//        statesButton.addTarget(self, action: #selector(presentStatesPopupModalViewController), for: .touchUpInside)
+//        statesButton.contentHorizontalAlignment = .center
+//        statesButton.titleLabel?.font =  .systemFont(ofSize: 15)
+//        statesButton.layer.cornerRadius = 5
+//        statesButton.setTitleColor(.darkGray, for: .normal)
+        //view.addSubview(statesButton)
         
         dimView = UIView()
         dimView.translatesAutoresizingMaskIntoConstraints = false
         dimView.backgroundColor = UIColor(white: 0, alpha: 0.5)
         dimView.isHidden = true
         view.addSubview(dimView)
+        
+        let Alabama = "Alabama"
+        let Alaska = "Alaska"
+        let Arizona = "Arkansas"
+        let California = "California"
+        let Colorado = "Colorado"
+        
+        states = [Alabama, Alaska, Arizona, California, Colorado]
+        
+        pickerView = UIPickerView(frame: .zero)
+        pickerView.translatesAutoresizingMaskIntoConstraints = false
+        pickerView.delegate = self
+        pickerView.dataSource = self
+//        pickerView.layer.cornerRadius = 10
+//        pickerView.layer.masksToBounds = true
+
+
+        view.addSubview(pickerView)
         
         setupConstraints()
         
@@ -95,29 +135,39 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         NSLayoutConstraint.activate([
             filterView.heightAnchor.constraint(equalToConstant: 50),
             filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            filterView.topAnchor.constraint(equalTo: statesButton.bottomAnchor, constant: 1),
+            filterView.topAnchor.constraint(equalTo: confirmationButton.bottomAnchor, constant: 2),
             filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             ])
+//        NSLayoutConstraint.activate([
+//            statesButton.heightAnchor.constraint(equalToConstant: 30),
+//            statesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+//            statesButton.topAnchor.constraint(equalTo:  confirmationButton.bottomAnchor, constant: 1),
+//            statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: padding * -1),
+//            ])
         NSLayoutConstraint.activate([
-            statesButton.heightAnchor.constraint(equalToConstant: 30),
-            statesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            statesButton.topAnchor.constraint(equalTo:  confirmationButton.bottomAnchor, constant: 1),
-            statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: padding * -1),
+            //pickerView.center.constraint(equalTo: view.leadingAnchor, constant: view.bounds.width/6),
+            pickerView.topAnchor.constraint(equalTo: filterView.bottomAnchor, constant: 1),
+            pickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            pickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
     }
     
     @objc func dismissFilterModalViewControllerAndSaveOptions(){
+        dismissDelegate?.undim()
+        repDismissDelegate?.undim()
+        print("should dim 4head")
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func presentStatesPopupModalViewController(){
-        let modalViewController = StatesPopopModalViewController()
-        //modalViewController.modalPresentationStyle = .custom
-        //modalViewController.transitioningDelegate = self
-        modalViewController.modalTransitionStyle = .crossDissolve
-        modalViewController.delegate = self
-        present(modalViewController, animated: true, completion: nil)
-    }
+//    @objc func presentStatesPopupModalViewController(){
+//        let modalViewController = StatesPopopModalViewController()
+//        //modalViewController.modalPresentationStyle = .custom
+//        //modalViewController.transitioningDelegate = self
+//        modalViewController.modalTransitionStyle = .crossDissolve
+//        modalViewController.delegate = self as! StateDelegate
+//        present(modalViewController, animated: true, completion: nil)
+//    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filtersArray.count
     }
@@ -215,11 +265,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         })
     }
 }
-extension FilterModalViewController: StateDelegate{
-    func stateChanged(newState: String) {
-        statesButton.setTitle(newState, for: .normal)
-    }
-}
+
 
 extension FilterModalViewController : UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
@@ -235,6 +281,7 @@ class PopupPresentationController : UIPresentationController {
             }
             let viewBoundaries = CGRect(x: theView.bounds.width/6, y: theView.bounds.height/5, width: (2*theView.bounds.width)/3, height: (1*theView.bounds.height)/2)
             //viewBoundaries.
+            
             return viewBoundaries
             //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
         }

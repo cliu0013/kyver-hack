@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol RepStateDelegate: class {
+    func stateChanged(newState: String)
+}
+protocol RepDismissDelegate: class {
+    func undim()
+}
 class RepresentativeNavViewController: UITableViewController{
     
     let padding: CGFloat = 30
@@ -20,10 +26,12 @@ class RepresentativeNavViewController: UITableViewController{
     let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
     let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
     let blurEffect = UIBlurEffect(style: .dark)
+
     
     let RepCellId = "RepCellId"
     
     var representatives: [Representative]!
+    var blurEffectView : UIVisualEffectView!
     let searchController = UISearchController(searchResultsController: nil)
     
     
@@ -47,6 +55,13 @@ class RepresentativeNavViewController: UITableViewController{
         let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
         representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
+        
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.isHidden = true
+        view.addSubview(blurEffectView)
         
     }
     
@@ -72,6 +87,8 @@ class RepresentativeNavViewController: UITableViewController{
         let modalViewController = FilterModalViewController()
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self
+        modalViewController.repDismissDelegate = self
+        blurEffectView.isHidden = false
         present(modalViewController, animated: true, completion: nil)
     }
     
@@ -122,7 +139,19 @@ extension RepresentativeNavViewController: UISearchResultsUpdating {
         // TODO
     }
 }
+extension RepresentativeNavViewController: RepStateDelegate{
+    func stateChanged(newState: String) {
+        //TODO Filter that state
+        print("TODO later")
+    }
+}
 
+extension RepresentativeNavViewController: RepDismissDelegate{
+    func undim() {
+        blurEffectView.isHidden = true
+        print("should undim")
+    }
+}
 //class HalfSizePresentationController : UIPresentationController {
 //
 //    override var frameOfPresentedViewInContainerView: CGRect {
