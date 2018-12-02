@@ -66,11 +66,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     
     var filtersArray: [Filter] = []
     var activePartyTypeFilter: Set<PartyType> = []
-    var activeType1Filter: Set<Type1> = []
-    var activeSenators : [Senator] = []
-    var activeRepresentatives : [Representative] = []
-    var senators : [Senator] = []
-    var representatives : [Representative] = []
+    
     
     var filterView: UICollectionView!
     var confirmationButton: UIButton!
@@ -103,7 +99,6 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         view.addSubview(confirmationButton)
         
         filtersArray.append(contentsOf: PartyType.allValues().map({ f in f as Filter }))
-        filtersArray.append(contentsOf: Type1.allValues().map({ f in f as Filter }))
         
         filterView = UICollectionView(frame: .zero, collectionViewLayout: FilterCollectionViewFlowLayout())
         filterView.translatesAutoresizingMaskIntoConstraints = false
@@ -174,9 +169,9 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         
         NSLayoutConstraint.activate([
             filterView.heightAnchor.constraint(equalToConstant: 50),
-            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*2),
             filterView.topAnchor.constraint(equalTo: confirmationButton.bottomAnchor, constant: 2),
-            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*2),
             ])
 //        NSLayoutConstraint.activate([
 //            statesButton.heightAnchor.constraint(equalToConstant: 30),
@@ -244,67 +239,50 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
                 activePartyTypeFilter.insert(partyType)
             }
         }
-        if let type1 = filter as? Type1 {
-            if shouldRemove {
-                activeType1Filter.remove(type1)
-            } else {
-                activeType1Filter.insert(type1)
-            }
-        }
-        
-        filterSenators()
-        filterRepresentatives()
+        repDelegate?.filterRepresentatives(activePartyTypeFilter: activePartyTypeFilter)
+        delegate?.filterSenators(activePartyTypeFilter: activePartyTypeFilter)
     }
     
-    func filterSenators() {
-        if activePartyTypeFilter.count == 0 && activeType1Filter.count == 0{
-            activeSenators = senators
-            return
-        }
-        activeSenators = senators.filter({ s in
-            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
-            if activePartyTypeFilter.count > 0 {
-                if activePartyTypeFilter.contains(s.convertToPartyType(party: s.party)) {
-                    partyTypeFilteredOut = false
-                }
-            }
-            
-            //            var Type1FilteredOut = activeType1Filter.count > 0
-            //            if activeType1Filter.count > 0 {
-            //                for Type2 in r.type1 {
-            //                    if activeType1Filter.contains(Type1) {
-            //                        Type1FilteredOut = false
-            //                    }
-            //                }
-            //            }
-            return !partyTypeFilteredOut
-        })
-    }
-    
-    func filterRepresentatives() {
-        if activePartyTypeFilter.count == 0 && activeType1Filter.count == 0{
-            activeRepresentatives = representatives
-            return
-        }
-        activeRepresentatives = representatives.filter({ r in
-            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
-            if activePartyTypeFilter.count > 0 {
-                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
-                    partyTypeFilteredOut = false
-                }
-            }
-            
-            //            var Type1FilteredOut = activeType1Filter.count > 0
-            //            if activeType1Filter.count > 0 {
-            //                for Type2 in r.type1 {
-            //                    if activeType1Filter.contains(Type1) {
-            //                        Type1FilteredOut = false
-            //                    }
-            //                }
-            //            }
-            return !partyTypeFilteredOut
-        })
-    }
+//    func filterSenators() {
+//        if activePartyTypeFilter.count == 0{
+//            activeSenators = senators
+//            return
+//        }
+//        activeSenators = senators.filter({ s in
+//            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+//            if activePartyTypeFilter.count > 0 {
+//                if activePartyTypeFilter.contains(s.convertToPartyType(party: s.party)) {
+//                    partyTypeFilteredOut = false
+//                }
+//            }
+//            return !partyTypeFilteredOut
+//        })
+//    }
+//
+//    func filterRepresentatives() {
+//        if activePartyTypeFilter.count == 0{
+//            activeRepresentatives = representatives
+//            return
+//        }
+//        activeRepresentatives = representatives.filter({ r in
+//            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+//            if activePartyTypeFilter.count > 0 {
+//                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+//                    partyTypeFilteredOut = false
+//                }
+//            }
+//
+//            //            var Type1FilteredOut = activeType1Filter.count > 0
+//            //            if activeType1Filter.count > 0 {
+//            //                for Type2 in r.type1 {
+//            //                    if activeType1Filter.contains(Type1) {
+//            //                        Type1FilteredOut = false
+//            //                    }
+//            //                }
+//            //            }
+//            return !partyTypeFilteredOut
+//        })
+//    }
 }
 
 

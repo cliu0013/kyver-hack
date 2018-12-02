@@ -26,16 +26,4 @@ enum PartyType: Filter {
     }
 }
 
-enum Type1: Filter {
-    case filter1
-    case filter2
-    case filter3
-    
-    var filterTitle: String {
-        return String(describing: self)
-    }
-    
-    static func allValues() -> [Type1] {
-        return [.filter1, .filter2, .filter3]
-    }
-}
+

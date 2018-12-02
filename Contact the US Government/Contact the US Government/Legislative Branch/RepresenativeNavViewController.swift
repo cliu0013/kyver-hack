@@ -11,6 +11,7 @@ import UIKit
 protocol RepStateDelegate: class {
     func stateChanged(newState: String)
     func districtChanged(newDistrict: String)
+    func filterRepresentatives(activePartyTypeFilter: Set<PartyType>)
 }
 protocol RepDismissDelegate: class {
     func undim()
@@ -34,18 +35,22 @@ class RepresentativeNavViewController: UITableViewController{
     var representatives: [Representative]!
     var blurEffectView : UIVisualEffectView!
     let searchController = UISearchController(searchResultsController: nil)
+
+    var activeRepresentatives : [Representative] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "Representatives"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        //navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = gloryRed
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         edgesForExtendedLayout = [] // gets rid of views going under navigation controller
         setupNavBarItems()
+        
+        
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -57,6 +62,7 @@ class RepresentativeNavViewController: UITableViewController{
         let alaska = Representative(state: "Alaska", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
         representatives = [alaska, zeldin, alaska, zeldin, zeldin]
+        
         
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
@@ -144,6 +150,7 @@ extension RepresentativeNavViewController: UISearchResultsUpdating {
     }
 }
 extension RepresentativeNavViewController: RepStateDelegate{
+    
     func stateChanged(newState: String) {
         //TODO Filter that state
         var newReps: [Representative] = []
@@ -158,8 +165,35 @@ extension RepresentativeNavViewController: RepStateDelegate{
     }
     
     func districtChanged(newDistrict: String) {
-        print("Change the District 4head")
+        var newReps: [Representative] = []
+        for representative in representatives{
+            if (representative.district == newDistrict){
+                newReps.append(representative)
+            }
+        }
+        representatives = newReps
+        print("Rep Change")
+        tableView.reloadData()
     }
+    
+    func filterRepresentatives(activePartyTypeFilter: Set<PartyType>) {
+        if activePartyTypeFilter.count == 0{
+            activeRepresentatives = representatives
+            return
+        }
+        activeRepresentatives = representatives.filter({ r in
+            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+            if activePartyTypeFilter.count > 0 {
+                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                    partyTypeFilteredOut = false
+                }
+            }
+            return !partyTypeFilteredOut
+        })
+        representatives = activeRepresentatives
+        tableView.reloadData()
+    }
+    
 }
 
 extension RepresentativeNavViewController: RepDismissDelegate{

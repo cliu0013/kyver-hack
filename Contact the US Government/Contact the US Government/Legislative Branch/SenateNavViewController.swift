@@ -9,10 +9,12 @@
 import UIKit
 protocol StateDelegate: class {
     func stateChanged(newState: String)
+    func filterSenators(activePartyTypeFilter: Set<PartyType>)
 }
 protocol DismissDelegate: class {
     func undim()
 }
+
 class SenateNavViewController: UITableViewController{
     
     let padding: CGFloat = 30
@@ -33,13 +35,15 @@ class SenateNavViewController: UITableViewController{
     var blurEffectView : UIVisualEffectView!
     var searchBar: UISearchBar!
     let searchController = UISearchController(searchResultsController: nil)
+    var activeSenators : [Senator] = []
+    var searchedSenators = [Senator]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "Senators"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        //navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = gloryRed
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
@@ -66,6 +70,7 @@ class SenateNavViewController: UITableViewController{
         
         //representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
         senators = [colorado, alexander, colorado, alexander, alexander]
+        activeSenators = senators
         
         
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -129,13 +134,21 @@ class SenateNavViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering(){
+            return searchedSenators.count
+        }
         return senators.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //if indexPath.section == 0 {
         let cell = tableView.dequeueReusableCell(withIdentifier: SenCellId, for: indexPath) as! SenatorsTableViewCell
-        let senator = senators[indexPath.row]
+        let senator: Senator
+        if isFiltering(){
+            senator = searchedSenators[indexPath.row]
+        } else {
+            senator = senators[indexPath.row]
+        }
         cell.configure(for: senator)
         cell.setNeedsUpdateConstraints()
         cell.selectionStyle = .none
@@ -173,9 +186,21 @@ class SenateNavViewController: UITableViewController{
         //        }
     }
     
-    func reloadTable(){
+    // MARK: - Private instance methods
+    
+    func searchBarIsEmpty() -> Bool {
+        // Returns true if the text is empty or nil
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        searchedSenators = senators.filter({( senator : Senator) -> Bool in
+            return senator.name.lowercased().contains(searchText.lowercased())
+        })
+        senators = searchedSenators
         tableView.reloadData()
     }
+
     
     
 }
@@ -187,7 +212,7 @@ extension SenateNavViewController : UIViewControllerTransitioningDelegate {
 extension SenateNavViewController: UISearchResultsUpdating {
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO
+        filterContentForSearchText(searchController.searchBar.text!)
     }
 }
 extension SenateNavViewController: StateDelegate{
@@ -202,6 +227,28 @@ extension SenateNavViewController: StateDelegate{
         print("Sen change")
         tableView.reloadData()
     }
+    
+    func filterSenators(activePartyTypeFilter: Set<PartyType>) {
+        if activePartyTypeFilter.count == 0{
+            activeSenators = senators
+            return
+        }
+        activeSenators = senators.filter({ r in
+            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+            if activePartyTypeFilter.count > 0 {
+                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                    partyTypeFilteredOut = false
+                }
+            }
+            return !partyTypeFilteredOut
+        })
+        tableView.reloadData()
+    }
+    
+    func isFiltering() -> Bool {
+        return searchController.isActive && !searchBarIsEmpty()
+    }
+
 }
 
 extension SenateNavViewController: DismissDelegate{
