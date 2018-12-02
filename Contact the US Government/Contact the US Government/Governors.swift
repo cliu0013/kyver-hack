@@ -71,4 +71,33 @@ class Representative: Codable {
     
 }
 
+// struct Senator: Codable {
+//     let name: String
+//     let address: Address
+//     let party: String
+//     let phones: [String]
+//     let urls: [String]
+//     let photoUrl: [String]
+//     let channels: [Channel]
+// }
+
+// struct Address: Codable {
+//     let line1: String
+//     let city: String
+//     let state: String
+//     let zip: String
+// }
+
+// struct Channel: Codable {
+//     let type: String
+//     let id: String
+// }
+
+// struct SenatorResponse: Codable {
+//     var officials: [Senator]
+// }
+
+
+
+
 
