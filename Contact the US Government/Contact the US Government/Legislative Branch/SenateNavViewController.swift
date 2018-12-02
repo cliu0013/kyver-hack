@@ -51,6 +51,7 @@ class SenateNavViewController: UITableViewController{
         // create the search bar programatically since you won't be
         // able to drag one onto the navigation bar
         
+        searchController.searchResultsUpdater = self
         setupNavBarItems()
         
         definesPresentationContext = true
@@ -64,7 +65,7 @@ class SenateNavViewController: UITableViewController{
         
         let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
-        let colorado = Senator(state: "Colorado", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
+        let colorado = Senator(state: "Colorado", _class: "class I", name: "Guy Fieri", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
         //let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
@@ -111,23 +112,6 @@ class SenateNavViewController: UITableViewController{
         blurEffectView.isHidden = false
     }
     
-    //    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    //        if section == 0 {
-    //            let label = UILabel()
-    //            label.text = "  Senators"
-    //            label.font = headerFont
-    //            label.textColor = .white
-    //            label.backgroundColor = gloryBlue
-    //            return label
-    //        } else {
-    //            let label = UILabel()
-    //            label.text = "  Representative"
-    //            label.font = headerFont
-    //            label.textColor = .white
-    //            label.backgroundColor = gloryBlue
-    //            return label
-    //        }
-    //    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -157,17 +141,6 @@ class SenateNavViewController: UITableViewController{
         
         
         return cell
-        //        } else{
-        //            let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
-        //            let representative = representatives[indexPath.row]
-        //            cell.configure(for: representative)
-        //            cell.setNeedsUpdateConstraints()
-        //            cell.selectionStyle = .none
-        //            cell.backgroundColor = .white
-        //            cell.textLabel?.numberOfLines = 0
-        //
-        //            return cell
-        //        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -186,7 +159,6 @@ class SenateNavViewController: UITableViewController{
         //        }
     }
     
-    // MARK: - Private instance methods
     
     func searchBarIsEmpty() -> Bool {
         // Returns true if the text is empty or nil
@@ -197,7 +169,7 @@ class SenateNavViewController: UITableViewController{
         searchedSenators = senators.filter({( senator : Senator) -> Bool in
             return senator.name.lowercased().contains(searchText.lowercased())
         })
-        senators = searchedSenators
+
         tableView.reloadData()
     }
 

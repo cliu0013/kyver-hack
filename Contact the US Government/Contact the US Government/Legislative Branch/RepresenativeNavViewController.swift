@@ -34,9 +34,11 @@ class RepresentativeNavViewController: UITableViewController{
     
     var representatives: [Representative]!
     var blurEffectView : UIVisualEffectView!
+    var searchBar: UISearchBar!
     let searchController = UISearchController(searchResultsController: nil)
 
     var activeRepresentatives : [Representative] = []
+    var searchedRepresentatives = [Representative]()
     
     
     override func viewDidLoad() {
@@ -50,7 +52,7 @@ class RepresentativeNavViewController: UITableViewController{
         edgesForExtendedLayout = [] // gets rid of views going under navigation controller
         setupNavBarItems()
         
-        
+        searchController.searchResultsUpdater = self
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -106,20 +108,28 @@ class RepresentativeNavViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering(){
+            return searchedRepresentatives.count
+        }
         return representatives.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
-            let representative = representatives[indexPath.row]
-            cell.configure(for: representative)
-            cell.setNeedsUpdateConstraints()
-            cell.selectionStyle = .none
-            cell.backgroundColor = .white
-            cell.textLabel?.numberOfLines = 0
-            
-            return cell
-
+        let representative: Representative
+        if isFiltering(){
+            representative = searchedRepresentatives[indexPath.row]
+        } else {
+            representative = representatives[indexPath.row]
+        }
+        cell.configure(for: representative)
+        cell.setNeedsUpdateConstraints()
+        cell.selectionStyle = .none
+        cell.backgroundColor = .white
+        cell.textLabel?.numberOfLines = 0
+        
+        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -132,10 +142,22 @@ class RepresentativeNavViewController: UITableViewController{
         navigationController?.pushViewController(navViewController, animated: true)
     }
     
-    func reloadTable(){
+    func searchBarIsEmpty() -> Bool {
+        // Returns true if the text is empty or nil
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        searchedRepresentatives = representatives.filter({( representative : Representative) -> Bool in
+            return representative.name.lowercased().contains(searchText.lowercased())
+        })
+        
         tableView.reloadData()
     }
     
+    func isFiltering() -> Bool {
+        return searchController.isActive && !searchBarIsEmpty()
+    }
     
 }
 extension RepresentativeNavViewController : UIViewControllerTransitioningDelegate {
@@ -146,7 +168,7 @@ extension RepresentativeNavViewController : UIViewControllerTransitioningDelegat
 extension RepresentativeNavViewController: UISearchResultsUpdating {
     // MARK: - UISearchResultsUpdating Delegate
     func updateSearchResults(for searchController: UISearchController) {
-        // TODO
+        filterContentForSearchText(searchController.searchBar.text!)
     }
 }
 extension RepresentativeNavViewController: RepStateDelegate{
@@ -201,18 +223,5 @@ extension RepresentativeNavViewController: RepDismissDelegate{
         blurEffectView.isHidden = true
     }
 }
-//class HalfSizePresentationController : UIPresentationController {
-//
-//    override var frameOfPresentedViewInContainerView: CGRect {
-//        get {
-//            guard let theView = containerView else {
-//                return CGRect.zero
-//            }
-//            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
-//            //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
-//        }
-//    }
-//
-//
-//}
+
 
