@@ -12,6 +12,9 @@
 		8E7D25BE21AF1E1F00768A73 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */; };
 		8E7D25C021AF1E5F00768A73 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BF21AF1E5E00768A73 /* Filter.swift */; };
 		8EA73CDF21B06C7B00CA3537 /* StatesPopupModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CDE21B06C7B00CA3537 /* StatesPopupModalViewController.swift */; };
+		8EA73CE721B367ED00CA3537 /* NetworkManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CE621B367EC00CA3537 /* NetworkManagement.swift */; };
+		8EA73CE921B3693400CA3537 /* RepresenativeNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CE821B3693400CA3537 /* RepresenativeNavViewController.swift */; };
+		8EA73CEB21B3695200CA3537 /* SenateNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CEA21B3695200CA3537 /* SenateNavViewController.swift */; };
 		D65F994621AC71D7007F1545 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F994521AC71D7007F1545 /* AppDelegate.swift */; };
 		D65F994821AC71D7007F1545 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F994721AC71D7007F1545 /* ViewController.swift */; };
 		D65F994B21AC71D7007F1545 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D65F994921AC71D7007F1545 /* Main.storyboard */; };
@@ -33,6 +36,9 @@
 		8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		8E7D25BF21AF1E5E00768A73 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		8EA73CDE21B06C7B00CA3537 /* StatesPopupModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesPopupModalViewController.swift; sourceTree = "<group>"; };
+		8EA73CE621B367EC00CA3537 /* NetworkManagement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManagement.swift; sourceTree = "<group>"; };
+		8EA73CE821B3693400CA3537 /* RepresenativeNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresenativeNavViewController.swift; sourceTree = "<group>"; };
+		8EA73CEA21B3695200CA3537 /* SenateNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenateNavViewController.swift; sourceTree = "<group>"; };
 		D65F994221AC71D7007F1545 /* Contact the US Government.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contact the US Government.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D65F994521AC71D7007F1545 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D65F994721AC71D7007F1545 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				D65F994521AC71D7007F1545 /* AppDelegate.swift */,
+				8EA73CE621B367EC00CA3537 /* NetworkManagement.swift */,
 				D65F996321AD0F48007F1545 /* Governors.swift */,
 				D6E5946C21AE2A7600670C2A /* navViewController */,
 				D6E5946E21AE2ABB00670C2A /* Legislative Branch */,
@@ -128,6 +135,8 @@
 				8E7D25BF21AF1E5E00768A73 /* Filter.swift */,
 				8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */,
 				8E7D25BB21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift */,
+				8EA73CE821B3693400CA3537 /* RepresenativeNavViewController.swift */,
+				8EA73CEA21B3695200CA3537 /* SenateNavViewController.swift */,
 				D65F996521AD1F6C007F1545 /* TableViewCells.swift */,
 				8EA73CDE21B06C7B00CA3537 /* StatesPopupModalViewController.swift */,
 			);
@@ -272,15 +281,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EA73CEB21B3695200CA3537 /* SenateNavViewController.swift in Sources */,
 				8E7D25BE21AF1E1F00768A73 /* FilterCollectionViewCell.swift in Sources */,
 				D65F994821AC71D7007F1545 /* ViewController.swift in Sources */,
 				8E7D25C021AF1E5F00768A73 /* Filter.swift in Sources */,
 				D65F996A21ADE11D007F1545 /* RepresentativeViewController.swift in Sources */,
 				D65F996621AD1F6C007F1545 /* TableViewCells.swift in Sources */,
 				D65F994621AC71D7007F1545 /* AppDelegate.swift in Sources */,
+				8EA73CE921B3693400CA3537 /* RepresenativeNavViewController.swift in Sources */,
 				D65F996821ADE112007F1545 /* SenateViewController.swift in Sources */,
 				8EA73CDF21B06C7B00CA3537 /* StatesPopupModalViewController.swift in Sources */,
 				D65F995A21ACE455007F1545 /* LegislativeNavViewController.swift in Sources */,
+				8EA73CE721B367ED00CA3537 /* NetworkManagement.swift in Sources */,
 				D65F996421AD0F48007F1545 /* Governors.swift in Sources */,
 				D65F995821AC7B25007F1545 /* FilterModalViewController.swift in Sources */,
 				8E7D25BC21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift in Sources */,

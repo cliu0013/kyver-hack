@@ -93,9 +93,9 @@ class Representative: Codable {
 //     let id: String
 // }
 
-// struct SenatorResponse: Codable {
-//     var officials: [Senator]
-// }
+ struct SenatorResponse: Codable {
+     var officials: [Senator]
+ }
 
 
 

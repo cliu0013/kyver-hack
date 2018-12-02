@@ -8,10 +8,10 @@
 
 import UIKit
 
+protocol StateDelegate: class {
+    func stateChanged(newState: String)
+}
 class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource{
-    
-    
-    
     
     let padding: CGFloat = 50
     let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
@@ -29,6 +29,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     var filterView: UICollectionView!
     var confirmationButton: UIButton!
     var statesButton: UIButton!
+    var dimView : UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +73,11 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         statesButton.setTitleColor(.darkGray, for: .normal)
         view.addSubview(statesButton)
         
-        
+        dimView = UIView()
+        dimView.translatesAutoresizingMaskIntoConstraints = false
+        dimView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        dimView.isHidden = true
+        view.addSubview(dimView)
         
         setupConstraints()
         
@@ -99,8 +104,6 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
             statesButton.topAnchor.constraint(equalTo:  confirmationButton.bottomAnchor, constant: 1),
             statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: padding * -1),
             ])
-        
-        
     }
     
     @objc func dismissFilterModalViewControllerAndSaveOptions(){
@@ -109,13 +112,12 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     
     @objc func presentStatesPopupModalViewController(){
         let modalViewController = StatesPopopModalViewController()
-        modalViewController.modalPresentationStyle = .custom
-        modalViewController.transitioningDelegate = self
+        //modalViewController.modalPresentationStyle = .custom
+        //modalViewController.transitioningDelegate = self
         modalViewController.modalTransitionStyle = .crossDissolve
+        modalViewController.delegate = self
         present(modalViewController, animated: true, completion: nil)
-        
     }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filtersArray.count
     }
@@ -213,6 +215,12 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         })
     }
 }
+extension FilterModalViewController: StateDelegate{
+    func stateChanged(newState: String) {
+        statesButton.setTitle(newState, for: .normal)
+    }
+}
+
 extension FilterModalViewController : UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return PopupPresentationController(presentedViewController: presented, presenting: presenting)

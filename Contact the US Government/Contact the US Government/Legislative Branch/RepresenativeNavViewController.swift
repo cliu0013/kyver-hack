@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LegislativeNavViewController: UITableViewController{
+class RepresentativeNavViewController: UITableViewController{
     
     let padding: CGFloat = 30
     let buttonHeight: CGFloat = 45
@@ -22,35 +22,32 @@ class LegislativeNavViewController: UITableViewController{
     let blurEffect = UIBlurEffect(style: .dark)
     
     let RepCellId = "RepCellId"
-    let SenCellId = "SenCellId"
+    
     var representatives: [Representative]!
-    var senators: [Senator]!
+    let searchController = UISearchController(searchResultsController: nil)
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.title = "Legislative Branch"
+        navigationItem.title = "Representatives"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = gloryRed
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         edgesForExtendedLayout = [] // gets rid of views going under navigation controller
-        
         setupNavBarItems()
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(RepresentativesTableViewCell.self, forCellReuseIdentifier: RepCellId)
-        tableView.register(SenatorsTableViewCell.self, forCellReuseIdentifier: SenCellId)
         tableView.sectionHeaderHeight = 50
         
-        let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
         let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
         representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
-        senators = [alexander, alexander, alexander, alexander, alexander]
+        
     }
     
     
@@ -60,7 +57,10 @@ class LegislativeNavViewController: UITableViewController{
         filterButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         filterButton.tintColor = .white
         filterButton.addTarget(self, action: #selector(presentFilterModalViewController), for: .touchUpInside)
-        
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Representatives"
+        navigationItem.searchController = searchController
         navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: filterButton) ]
     }
     
@@ -75,24 +75,6 @@ class LegislativeNavViewController: UITableViewController{
         present(modalViewController, animated: true, completion: nil)
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let label = UILabel()
-            label.text = "  Senators"
-            label.font = headerFont
-            label.textColor = .white
-            label.backgroundColor = gloryBlue
-            return label
-        } else {
-            let label = UILabel()
-            label.text = "  Representative"
-            label.font = headerFont
-            label.textColor = .white
-            label.backgroundColor = gloryBlue
-            return label
-        }
-    }
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -102,28 +84,15 @@ class LegislativeNavViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SenCellId, for: indexPath) as! SenatorsTableViewCell
-            let senator = senators[indexPath.row]
-            cell.configure(for: senator)
-            cell.setNeedsUpdateConstraints()
-            cell.selectionStyle = .none
-            cell.backgroundColor = .white
-            cell.textLabel?.numberOfLines = 0
-            
-            
-            return cell
-        } else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
-            let representative = representatives[indexPath.row]
-            cell.configure(for: representative)
-            cell.setNeedsUpdateConstraints()
-            cell.selectionStyle = .none
-            cell.backgroundColor = .white
-            cell.textLabel?.numberOfLines = 0
-            
-            return cell
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
+        let representative = representatives[indexPath.row]
+        cell.configure(for: representative)
+        cell.setNeedsUpdateConstraints()
+        cell.selectionStyle = .none
+        cell.backgroundColor = .white
+        cell.textLabel?.numberOfLines = 0
+        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -131,15 +100,9 @@ class LegislativeNavViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0{
-            let navViewController = SenateViewController()
-            navViewController.senator = senators[indexPath.row]
-            navigationController?.pushViewController(navViewController, animated: true)
-        } else {
-            let navViewController = RepresentativeViewController()
-            navViewController.representative = representatives[indexPath.row]
-            navigationController?.pushViewController(navViewController, animated: true)
-        }
+        let navViewController = RepresentativeViewController()
+        navViewController.representative = representatives[indexPath.row]
+        navigationController?.pushViewController(navViewController, animated: true)
     }
     
     func reloadTable(){
@@ -148,24 +111,30 @@ class LegislativeNavViewController: UITableViewController{
     
     
 }
-extension LegislativeNavViewController : UIViewControllerTransitioningDelegate {
+extension RepresentativeNavViewController : UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
-
-class HalfSizePresentationController : UIPresentationController {
-    
-    override var frameOfPresentedViewInContainerView: CGRect {
-        get {
-            guard let theView = containerView else {
-                return CGRect.zero
-            }
-            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
-            //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
-        }
+extension RepresentativeNavViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        // TODO
     }
-    
-    
 }
+
+//class HalfSizePresentationController : UIPresentationController {
+//
+//    override var frameOfPresentedViewInContainerView: CGRect {
+//        get {
+//            guard let theView = containerView else {
+//                return CGRect.zero
+//            }
+//            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
+//            //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
+//        }
+//    }
+//
+//
+//}
 
