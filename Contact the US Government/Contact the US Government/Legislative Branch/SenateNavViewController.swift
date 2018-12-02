@@ -60,10 +60,12 @@ class SenateNavViewController: UITableViewController{
         
         let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
+        let colorado = Senator(state: "Colorado", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
+        
         //let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
         //representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
-        senators = [alexander, alexander, alexander, alexander, alexander]
+        senators = [colorado, alexander, colorado, alexander, alexander]
         
         
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -98,6 +100,7 @@ class SenateNavViewController: UITableViewController{
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self
         modalViewController.dismissDelegate = self
+        modalViewController.delegate = self
         present(modalViewController, animated: true, completion: nil)
         
         blurEffectView.isHidden = false
@@ -126,7 +129,7 @@ class SenateNavViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return senators.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -189,15 +192,21 @@ extension SenateNavViewController: UISearchResultsUpdating {
 }
 extension SenateNavViewController: StateDelegate{
     func stateChanged(newState: String) {
-        //TODO Filter that state
-        print("TODO later")
+        var newSens: [Senator] = []
+        for senator in senators{
+            if (senator.state == newState){
+                newSens.append(senator)
+            }
+        }
+        senators = newSens
+        print("Sen change")
+        tableView.reloadData()
     }
 }
 
 extension SenateNavViewController: DismissDelegate{
     func undim() {
         blurEffectView.isHidden = true
-        print("should undim")
     }
 }
 

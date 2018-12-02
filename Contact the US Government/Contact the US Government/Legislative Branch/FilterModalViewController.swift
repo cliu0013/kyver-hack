@@ -12,22 +12,48 @@ import UIKit
 class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource, UIPickerViewDataSource, UIPickerViewDelegate{
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+        return 2
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return states.count
+        if component == 1 {
+            return states.count
+        }
+        else {
+            return districts.count
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print("Pressed")
-        let state = states[row]
-        delegate?.stateChanged(newState: state)
+        done = true
+        globalRow = row
+        globalcomponent = component
+    }
+    
+    func changeAttr(row: Int, component: Int, done: Bool){
+        if (done == true && row != -1 && component != -1){
+            if component == 1{
+                let state = states[row]
+                delegate?.stateChanged(newState: state)
+                repDelegate?.stateChanged(newState: state)
+            }
+            else {
+                let district = states[row]
+                repDelegate?.districtChanged(newDistrict: district)
+            }
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        let state = states[row]
-        return state
+        if component == 1{
+            let state = states[row]
+            return state
+        }
+        else {
+            let district = districts[row]
+            return district
+        }
+        
     }
     
     let padding: CGFloat = 50
@@ -36,6 +62,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     let filterReuseIdentifier: String = "FilterCollectionViewCell"
     var pickerView: UIPickerView!
     var states : [String] = []
+    var districts : [String] = []
     
     var filtersArray: [Filter] = []
     var activePartyTypeFilter: Set<PartyType> = []
@@ -52,6 +79,10 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     weak var delegate: StateDelegate?
     weak var dismissDelegate: DismissDelegate?
     weak var repDismissDelegate: RepDismissDelegate?
+    weak var repDelegate: RepStateDelegate?
+    var done: Bool = false
+    var globalRow: Int = -1
+    var globalcomponent: Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,8 +137,17 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         let Arizona = "Arkansas"
         let California = "California"
         let Colorado = "Colorado"
+        let newYork = "New York"
+        let tennessee = "Tennessee"
         
-        states = [Alabama, Alaska, Arizona, California, Colorado]
+        states = [Alabama, Alaska, Arizona, California, Colorado, newYork, tennessee]
+        
+        let first = "1st"
+        let second = "2nd"
+        let third = "3rd"
+        
+        districts = [first, second, third]
+        
         
         pickerView = UIPickerView(frame: .zero)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,9 +196,10 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     @objc func dismissFilterModalViewControllerAndSaveOptions(){
         dismissDelegate?.undim()
         repDismissDelegate?.undim()
-        print("should dim 4head")
+        changeAttr(row: globalRow, component: globalcomponent, done: done)
         dismiss(animated: true, completion: nil)
     }
+    
     
 //    @objc func presentStatesPopupModalViewController(){
 //        let modalViewController = StatesPopopModalViewController()

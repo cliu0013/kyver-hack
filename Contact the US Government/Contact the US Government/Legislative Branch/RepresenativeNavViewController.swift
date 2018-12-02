@@ -10,6 +10,7 @@ import UIKit
 
 protocol RepStateDelegate: class {
     func stateChanged(newState: String)
+    func districtChanged(newDistrict: String)
 }
 protocol RepDismissDelegate: class {
     func undim()
@@ -53,8 +54,9 @@ class RepresentativeNavViewController: UITableViewController{
         
         
         let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
+        let alaska = Representative(state: "Alaska", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
-        representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
+        representatives = [alaska, zeldin, alaska, zeldin, zeldin]
         
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
@@ -88,6 +90,7 @@ class RepresentativeNavViewController: UITableViewController{
         modalViewController.modalPresentationStyle = .custom
         modalViewController.transitioningDelegate = self
         modalViewController.repDismissDelegate = self
+        modalViewController.repDelegate = self
         blurEffectView.isHidden = false
         present(modalViewController, animated: true, completion: nil)
     }
@@ -97,19 +100,20 @@ class RepresentativeNavViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return representatives.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
-        let representative = representatives[indexPath.row]
-        cell.configure(for: representative)
-        cell.setNeedsUpdateConstraints()
-        cell.selectionStyle = .none
-        cell.backgroundColor = .white
-        cell.textLabel?.numberOfLines = 0
-        
-        return cell
+            let representative = representatives[indexPath.row]
+            cell.configure(for: representative)
+            cell.setNeedsUpdateConstraints()
+            cell.selectionStyle = .none
+            cell.backgroundColor = .white
+            cell.textLabel?.numberOfLines = 0
+            
+            return cell
+
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -142,14 +146,25 @@ extension RepresentativeNavViewController: UISearchResultsUpdating {
 extension RepresentativeNavViewController: RepStateDelegate{
     func stateChanged(newState: String) {
         //TODO Filter that state
-        print("TODO later")
+        var newReps: [Representative] = []
+        for representative in representatives{
+            if (representative.state == newState){
+                newReps.append(representative)
+            }
+        }
+        representatives = newReps
+        print("Rep Change")
+        tableView.reloadData()
+    }
+    
+    func districtChanged(newDistrict: String) {
+        print("Change the District 4head")
     }
 }
 
 extension RepresentativeNavViewController: RepDismissDelegate{
     func undim() {
         blurEffectView.isHidden = true
-        print("should undim")
     }
 }
 //class HalfSizePresentationController : UIPresentationController {
