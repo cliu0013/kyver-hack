@@ -32,6 +32,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
     var initialRepresentativeFilter: Bool = false
     var state: String = ""
     weak var delegate: StateDelegate?
+    var preferencesLabel: UILabel!
 
     
     override func viewDidLoad() {
@@ -42,7 +43,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = gloryRed
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = textAttributes
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         edgesForExtendedLayout = [] // gets rid of views going under navigation controller
         
         //setupNavBarItems()
@@ -92,7 +93,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
         filterView.dataSource = self
         filterView.register(FilterCollectionViewCell.self, forCellWithReuseIdentifier: filterReuseIdentifier)
         filterView.showsHorizontalScrollIndicator = false
-        //filterView.backgroundColor = gloryBlue
+        filterView.backgroundColor = .white
         filterView.allowsMultipleSelection = true //this is how we select multiple cells at once
         view.addSubview(filterView)
         
@@ -104,8 +105,18 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
         statesButton.contentHorizontalAlignment = .center
         statesButton.titleLabel?.font =  .systemFont(ofSize: 15)
         statesButton.layer.cornerRadius = 5
+        statesButton.layer.borderColor = UIColor(named: "black")?.cgColor
+        statesButton.layer.borderWidth = 0.5
         statesButton.setTitleColor(.darkGray, for: .normal)
         view.addSubview(statesButton)
+        
+        preferencesLabel = UILabel()
+        preferencesLabel.translatesAutoresizingMaskIntoConstraints = false
+        preferencesLabel.text = "Choose Preferences"
+        preferencesLabel.font = UIFont(name: ".SFUIText-Medium", size: 20)
+        preferencesLabel.textColor = .black
+        preferencesLabel.textAlignment = .center
+        view.addSubview(preferencesLabel)
         
         
         setupConstraints()
@@ -131,11 +142,23 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
             madeBy.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding),
             ])
         NSLayoutConstraint.activate([
-            filterView.heightAnchor.constraint(equalToConstant: 50),
-            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*2),
-            filterView.topAnchor.constraint(equalTo: Representative.bottomAnchor, constant: padding),
-            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*2),
+            preferencesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            preferencesLabel.topAnchor.constraint(equalTo: Representative.bottomAnchor, constant: padding/2)
             ])
+        NSLayoutConstraint.activate([
+            filterView.heightAnchor.constraint(equalToConstant: 50),
+            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*3),
+            filterView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 10),
+            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*3),
+            ])
+        
+        NSLayoutConstraint.activate([
+            statesButton.heightAnchor.constraint(equalToConstant: 30),
+            statesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*3),
+            statesButton.topAnchor.constraint(equalTo:  filterView.bottomAnchor, constant: 10),
+            statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*3),
+            ])
+
     
     }
     

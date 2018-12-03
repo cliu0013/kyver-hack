@@ -164,12 +164,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
             filterView.topAnchor.constraint(equalTo: confirmationButton.bottomAnchor, constant: 2),
             filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*2),
             ])
-//        NSLayoutConstraint.activate([
-//            statesButton.heightAnchor.constraint(equalToConstant: 30),
-//            statesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-//            statesButton.topAnchor.constraint(equalTo:  confirmationButton.bottomAnchor, constant: 1),
-//            statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: padding * -1),
-//            ])
+
         NSLayoutConstraint.activate([
             //pickerView.center.constraint(equalTo: view.leadingAnchor, constant: view.bounds.width/6),
             pickerView.topAnchor.constraint(equalTo: filterView.bottomAnchor, constant: 1),

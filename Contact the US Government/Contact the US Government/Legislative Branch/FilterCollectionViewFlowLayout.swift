@@ -11,7 +11,7 @@ import UIKit
 class FilterCollectionViewFlowLayout: UICollectionViewFlowLayout {
     var cellWidth: CGFloat!
     var cellHeight: CGFloat!
-    let edgeInset: CGFloat = 6
+    let edgeInset: CGFloat = 32
     let itemHeight: CGFloat = 34
     let itemWidth: CGFloat = 100
     
