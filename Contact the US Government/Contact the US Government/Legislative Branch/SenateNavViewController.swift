@@ -9,7 +9,7 @@
 import UIKit
 protocol StateDelegate: class {
     func stateChanged(newState: String)
-    func filterSenators(activePartyTypeFilter: Set<PartyType>)
+    func filterSenators(activePartyTypeFilter: Set<String>)
 }
 protocol DismissDelegate: class {
     func undim()
@@ -24,21 +24,21 @@ class SenateNavViewController: UITableViewController{
     
     let contentFont = UIFont(name: ".SFUIText-Medium", size: 20)
     let headerFont = UIFont(name: "HelveticaNeue-Bold", size: 25)
-    let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
-    let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
+    let gloryRed = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
+    let gloryBlue = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
     let blurEffect = UIBlurEffect(style: .dark)
     
     
     let SenCellId = "SenCellId"
     //var representatives: [Representative]!
-    var senators: [Senator]!
+    var senators = [Senator]()
     var blurEffectView : UIVisualEffectView!
     var searchBar: UISearchBar!
     let searchController = UISearchController(searchResultsController: nil)
     var activeSenators : [Senator] = []
     var searchedSenators = [Senator]()
     var initialFilter: Bool!
-    var activePartyTypeFilterPreference: Set<PartyType>!
+    var activePartyTypeFilterPreference: Set<String>!
     var state: String!
     
     
@@ -66,14 +66,13 @@ class SenateNavViewController: UITableViewController{
         tableView.register(SenatorsTableViewCell.self, forCellReuseIdentifier: SenCellId)
         tableView.sectionHeaderHeight = 50
         
-        let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
-        let colorado = Senator(state: "Colorado", _class: "class I", name: "Guy Fieri", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
         
         //let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
         
         //representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
-        senators = [colorado, alexander, colorado, alexander, alexander]
+        
+        getSenators(roles: "legislatorUpperBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
         activeSenators = senators
         
         if(initialFilter){
@@ -92,7 +91,7 @@ class SenateNavViewController: UITableViewController{
         view.addSubview(blurEffectView) //if you have more UIViews, use an insertSubview API to place it where needed
     }
     
-    func filterSenatorsInitially(activePartyTypeFilter: Set<PartyType>){
+    func filterSenatorsInitially(activePartyTypeFilter: Set<String>){
         if activePartyTypeFilter.count == 0{
             activeSenators = senators
             return
@@ -100,7 +99,7 @@ class SenateNavViewController: UITableViewController{
         activeSenators = senators.filter({ r in
             var partyTypeFilteredOut = activePartyTypeFilter.count > 0
             if activePartyTypeFilter.count > 0 {
-                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                if activePartyTypeFilter.contains(r.party) {
                     partyTypeFilteredOut = false
                 }
             }
@@ -112,11 +111,21 @@ class SenateNavViewController: UITableViewController{
     func filterSenatorsInitiallyByState(state: String){
         var newSenators: [Senator] = []
         for senator in senators{
-            if (senator.state == state){
+            if (senator.address[0].state == state){
                 newSenators.append(senator)
             }
         }
         senators = newSenators
+    }
+    
+    func getSenators(roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getSenators(roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
+            print("TODO")
+            self.senators = senatorsArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     
@@ -228,7 +237,7 @@ extension SenateNavViewController: StateDelegate{
     func stateChanged(newState: String) {
         var newSens: [Senator] = []
         for senator in senators{
-            if (senator.state == newState){
+            if (senator.address[0].state == newState){
                 newSens.append(senator)
             }
         }
@@ -237,7 +246,7 @@ extension SenateNavViewController: StateDelegate{
         tableView.reloadData()
     }
     
-    func filterSenators(activePartyTypeFilter: Set<PartyType>) {
+    func filterSenators(activePartyTypeFilter: Set<String>) {
         if activePartyTypeFilter.count == 0{
             activeSenators = senators
             return
@@ -245,7 +254,7 @@ extension SenateNavViewController: StateDelegate{
         activeSenators = senators.filter({ r in
             var partyTypeFilteredOut = activePartyTypeFilter.count > 0
             if activePartyTypeFilter.count > 0 {
-                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                if activePartyTypeFilter.contains(r.party) {
                     partyTypeFilteredOut = false
                 }
             }

@@ -10,8 +10,8 @@ import UIKit
 
 class FilterCollectionViewCell: UICollectionViewCell {
     var filterLabel: UILabel!
-    var unselectedColor: UIColor = .white
-    var selectedColor: UIColor = .lightGray
+    var unselectedColor: UIColor = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
+    var selectedColor: UIColor = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,9 +19,11 @@ class FilterCollectionViewCell: UICollectionViewCell {
         filterLabel.textAlignment = .center
         filterLabel.font = .systemFont(ofSize: 14)
         filterLabel.textColor = .darkGray
-        filterLabel.layer.borderColor = UIColor(named: "black")?.cgColor
-        filterLabel.layer.borderWidth = 0.5
+//        filterLabel.layer.borderColor = UIColor(named: "black")?.cgColor
+//        filterLabel.layer.borderWidth = 0.5
         filterLabel.layer.cornerRadius = 5
+        filterLabel.clipsToBounds = true
+        
         contentView.addSubview(filterLabel)
         isSelected = false
     }

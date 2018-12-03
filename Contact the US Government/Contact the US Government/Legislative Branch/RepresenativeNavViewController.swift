@@ -11,7 +11,7 @@ import UIKit
 protocol RepStateDelegate: class {
     func stateChanged(newState: String)
     func districtChanged(newDistrict: String)
-    func filterRepresentatives(activePartyTypeFilter: Set<PartyType>)
+    func filterRepresentatives(activePartyTypeFilter: Set<String>)
 }
 protocol RepDismissDelegate: class {
     func undim()
@@ -25,14 +25,14 @@ class RepresentativeNavViewController: UITableViewController{
     
     let contentFont = UIFont(name: ".SFUIText-Medium", size: 20)
     let headerFont = UIFont(name: "HelveticaNeue-Bold", size: 25)
-    let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
-    let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
+    let gloryRed = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
+    let gloryBlue = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
     let blurEffect = UIBlurEffect(style: .dark)
 
     
     let RepCellId = "RepCellId"
     
-    var representatives: [Representative]!
+    var representatives = [Representative]()
     var blurEffectView : UIVisualEffectView!
     var searchBar: UISearchBar!
     let searchController = UISearchController(searchResultsController: nil)
@@ -40,7 +40,7 @@ class RepresentativeNavViewController: UITableViewController{
     var activeRepresentatives : [Representative] = []
     var searchedRepresentatives = [Representative]()
     var initialFilter: Bool!
-    var activePartyTypeFilterPreference: Set<PartyType>!
+    var activePartyTypeFilterPreference: Set<String>!
     var state: String!
     
     
@@ -63,10 +63,8 @@ class RepresentativeNavViewController: UITableViewController{
         tableView.sectionHeaderHeight = 50
         
         
-        let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
-        let alaska = Representative(state: "Alaska", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
+        getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
         
-        representatives = [alaska, zeldin, alaska, zeldin, zeldin]
         
         if(initialFilter){
             filterRepresentativesInitially(activePartyTypeFilter: activePartyTypeFilterPreference)
@@ -85,8 +83,21 @@ class RepresentativeNavViewController: UITableViewController{
         view.addSubview(blurEffectView)
         
     }
+    func getRepresentatives(state: String, roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getRepresentativesUrl(state: state)
+        let length: Int = NetworkManager.representativesUrl.count - 1
+        for i in 0...length {
+            NetworkManager.getRepresentatives(i: i, roles: roles, YOUR_API_KEY: YOUR_API_KEY) { representative in
+                print("TODO")
+                self.representatives.append(representative[0])
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
     
-    func filterRepresentativesInitially(activePartyTypeFilter: Set<PartyType>){
+    func filterRepresentativesInitially(activePartyTypeFilter: Set<String>){
         if activePartyTypeFilter.count == 0{
             activeRepresentatives = representatives
             return
@@ -94,7 +105,7 @@ class RepresentativeNavViewController: UITableViewController{
         activeRepresentatives = representatives.filter({ r in
             var partyTypeFilteredOut = activePartyTypeFilter.count > 0
             if activePartyTypeFilter.count > 0 {
-                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                if activePartyTypeFilter.contains(r.party) {
                     partyTypeFilteredOut = false
                 }
             }
@@ -106,7 +117,7 @@ class RepresentativeNavViewController: UITableViewController{
     func filterRepresentativesInitiallyByState(state: String){
         var newReps: [Representative] = []
         for representative in representatives{
-            if (representative.state == state){
+            if (representative.address[0].state == state){
                 newReps.append(representative)
             }
         }
@@ -210,13 +221,15 @@ extension RepresentativeNavViewController: UISearchResultsUpdating {
     }
 }
 extension RepresentativeNavViewController: RepStateDelegate{
+
+    
     
     
     func stateChanged(newState: String) {
         //TODO Filter that state
         var newReps: [Representative] = []
         for representative in representatives{
-            if (representative.state == newState){
+            if (representative.address[0].state == newState){
                 newReps.append(representative)
             }
         }
@@ -225,17 +238,17 @@ extension RepresentativeNavViewController: RepStateDelegate{
     }
     
     func districtChanged(newDistrict: String) {
-        var newReps: [Representative] = []
-        for representative in representatives{
-            if (representative.district == newDistrict){
-                newReps.append(representative)
-            }
-        }
-        representatives = newReps
-        tableView.reloadData()
+//        var newReps: [Representative] = []
+//        for representative in representatives{
+//            if (representative.district == newDistrict){
+//                newReps.append(representative)
+//            }
+//        }
+//        representatives = newReps
+//        tableView.reloadData()
     }
     
-    func filterRepresentatives(activePartyTypeFilter: Set<PartyType>) {
+    func filterRepresentatives(activePartyTypeFilter: Set<String>) {
         if activePartyTypeFilter.count == 0{
             activeRepresentatives = representatives
             return
@@ -243,7 +256,7 @@ extension RepresentativeNavViewController: RepStateDelegate{
         activeRepresentatives = representatives.filter({ r in
             var partyTypeFilteredOut = activePartyTypeFilter.count > 0
             if activePartyTypeFilter.count > 0 {
-                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                if activePartyTypeFilter.contains(r.party) {
                     partyTypeFilteredOut = false
                 }
             }

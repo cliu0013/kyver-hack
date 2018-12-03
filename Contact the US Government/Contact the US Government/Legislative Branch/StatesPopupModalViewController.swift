@@ -42,6 +42,7 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
     let reuseIdentifier = "stateCellReuse"
     let cellHeight: CGFloat = 30
     
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,13 +59,64 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
 //        dimView.isHidden = true
 //        view.addSubview(dimView)
         
-        let Alabama = "Alabama"
-        let Alaska = "Alaska"
-        let Arizona = "Arkansas"
-        let California = "California"
-        let Colorado = "Colorado"
         
-        states = [Alabama, Alaska, Arizona, California, Colorado]
+       
+        
+        states = [
+            "Alabama",
+            "Alaska",
+            "Arizona",
+            "Arkansas",
+            "California",
+            "Colorado",
+            "Connecticut",
+            "Deleware",
+            "Florida",
+            "Georgia",
+            "Hawaii",
+            "Idaho",
+            "Indiana",
+            "Illinois",
+            "Iowa",
+            "Kansas",
+            "Kentucky",
+            "Louisiana",
+            "Michigan",
+            "Maryland",
+            "Minnesota",
+            "Missouri",
+            "Montana",
+            "Maine",
+            "Massachusetts",
+            "Mississippi",
+            "New Hampshire",
+            "New York",
+            "New Jersey",
+            "North Dakota",
+            "Nebraska",
+            "Nevada",
+            "New Mexico",
+            "North Carolina",
+            "Oklahoma",
+            "Oregon",
+            "Ohio",
+            "Pennsylvania",
+            "Rhode Island",
+            "South Dakota",
+            "South Carolina",
+            "Tennessee",
+            "Texas",
+            "West Virginia",
+            "Wisconsin",
+            "Wyoming",
+            "Washington",
+            "Utah",
+            "Virginia",
+            "Vermont"
+            
+            
+            ]
+
         
         pickerView = UIPickerView(frame: .zero)
         pickerView.translatesAutoresizingMaskIntoConstraints = false

@@ -17,14 +17,14 @@ class LegislativeNavViewController: UITableViewController{
     
     let contentFont = UIFont(name: ".SFUIText-Medium", size: 20)
     let headerFont = UIFont(name: "HelveticaNeue-Bold", size: 25)
-    let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
-    let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
+    let gloryRed = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
+    let gloryBlue = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
     let blurEffect = UIBlurEffect(style: .dark)
     
     let RepCellId = "RepCellId"
     let SenCellId = "SenCellId"
-    var representatives: [Representative]!
-    var senators: [Senator]!
+    var representatives: [Representative] = []
+    var senators: [Senator] = []
     
     
     override func viewDidLoad() {
@@ -45,12 +45,9 @@ class LegislativeNavViewController: UITableViewController{
         tableView.register(SenatorsTableViewCell.self, forCellReuseIdentifier: SenCellId)
         tableView.sectionHeaderHeight = 50
         
-        let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
+        getSenators(roles: "legislatorUpperBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
+        getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
         
-        let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
-        
-        representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
-        senators = [alexander, alexander, alexander, alexander, alexander]
     }
     
     
@@ -68,106 +65,127 @@ class LegislativeNavViewController: UITableViewController{
         print("do something")
     }
     
-    @objc func presentFilterModalViewController(){
-        let modalViewController = FilterModalViewController()
-        modalViewController.modalPresentationStyle = .custom
-        modalViewController.transitioningDelegate = self
-        present(modalViewController, animated: true, completion: nil)
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let label = UILabel()
-            label.text = "  Senators"
-            label.font = headerFont
-            label.textColor = .white
-            label.backgroundColor = gloryBlue
-            return label
-        } else {
-            let label = UILabel()
-            label.text = "  Representative"
-            label.font = headerFont
-            label.textColor = .white
-            label.backgroundColor = gloryBlue
-            return label
-        }
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SenCellId, for: indexPath) as! SenatorsTableViewCell
-            let senator = senators[indexPath.row]
-            cell.configure(for: senator)
-            cell.setNeedsUpdateConstraints()
-            cell.selectionStyle = .none
-            cell.backgroundColor = .white
-            cell.textLabel?.numberOfLines = 0
-            
-            
-            return cell
-        } else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
-            let representative = representatives[indexPath.row]
-            cell.configure(for: representative)
-            cell.setNeedsUpdateConstraints()
-            cell.selectionStyle = .none
-            cell.backgroundColor = .white
-            cell.textLabel?.numberOfLines = 0
-            
-            return cell
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeight
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0{
-            let navViewController = SenateViewController()
-            navViewController.senator = senators[indexPath.row]
-            navigationController?.pushViewController(navViewController, animated: true)
-        } else {
-            let navViewController = RepresentativeViewController()
-            navViewController.representative = representatives[indexPath.row]
-            navigationController?.pushViewController(navViewController, animated: true)
-        }
-    }
-    
-    func reloadTable(){
-        tableView.reloadData()
-    }
-    
-    
-}
-extension LegislativeNavViewController : UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
-    }
-}
-
-
-class HalfSizePresentationController : UIPresentationController {
-    
-    override var frameOfPresentedViewInContainerView: CGRect {
-        get {
-            guard let theView = containerView else {
-                return CGRect.zero
+    func getSenators(roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getSenators(roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
+            print("TODO")
+            self.senators = senatorsArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
-//            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
-            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/3, width: theView.bounds.width, height: theView.bounds.height/3)
-            //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
+        }
+    }
+    
+    func getRepresentatives(state: String, roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getRepresentativesUrl(state: state)
+        let length: Int = NetworkManager.representativesUrl.count - 1
+        for i in 0...length {
+            NetworkManager.getRepresentatives(i: i, roles: roles, YOUR_API_KEY: YOUR_API_KEY) { representative in
+                print("TODO")
+                self.representatives.append(representative[0])
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+        
+        @objc func presentFilterModalViewController(){
+            let modalViewController = FilterModalViewController()
+            modalViewController.modalPresentationStyle = .custom
+            modalViewController.transitioningDelegate = self
+            present(modalViewController, animated: true, completion: nil)
+        }
+        
+        override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+            if section == 0 {
+                let label = UILabel()
+                label.text = "  Senators"
+                label.font = headerFont
+                label.textColor = .white
+                label.backgroundColor = gloryBlue
+                return label
+            } else {
+                let label = UILabel()
+                label.text = "  Representative"
+                label.font = headerFont
+                label.textColor = .white
+                label.backgroundColor = gloryBlue
+                return label
+            }
+        }
+        
+        override func numberOfSections(in tableView: UITableView) -> Int {
+            return 2
+        }
+        
+        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return 3
+        }
+        
+        override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            if indexPath.section == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: SenCellId, for: indexPath) as! SenatorsTableViewCell
+                let senator = senators[indexPath.row]
+                cell.configure(for: senator)
+                cell.setNeedsUpdateConstraints()
+                cell.selectionStyle = .none
+                cell.backgroundColor = .white
+                cell.textLabel?.numberOfLines = 0
+                
+                
+                return cell
+            } else{
+                let cell = tableView.dequeueReusableCell(withIdentifier: RepCellId, for: indexPath) as! RepresentativesTableViewCell
+                let representative = representatives[indexPath.row]
+                cell.configure(for: representative)
+                cell.setNeedsUpdateConstraints()
+                cell.selectionStyle = .none
+                cell.backgroundColor = .white
+                cell.textLabel?.numberOfLines = 0
+                
+                return cell
+            }
+        }
+        
+        override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return cellHeight
+        }
+        
+        override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            if indexPath.section == 0{
+                let navViewController = SenateViewController()
+                navViewController.senator = senators[indexPath.row]
+                navigationController?.pushViewController(navViewController, animated: true)
+            } else {
+                let navViewController = RepresentativeViewController()
+                navViewController.representative = representatives[indexPath.row]
+                navigationController?.pushViewController(navViewController, animated: true)
+            }
+        }
+        
+        
+        
+    }
+    extension LegislativeNavViewController : UIViewControllerTransitioningDelegate {
+        func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+            return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
         }
     }
     
     
-}
+    class HalfSizePresentationController : UIPresentationController {
+        
+        override var frameOfPresentedViewInContainerView: CGRect {
+            get {
+                guard let theView = containerView else {
+                    return CGRect.zero
+                }
+                //            return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/6, width: theView.bounds.width, height: theView.bounds.height/6)
+                return CGRect(x: 0, y: theView.bounds.height - theView.bounds.height/3, width: theView.bounds.width, height: theView.bounds.height/3)
+                //            return CGRect(x: 0, y: theView.bounds.height/2, width: theView.bounds.width, height: theView.bounds.height/2)
+            }
+        }
+        
+        
+    }
 

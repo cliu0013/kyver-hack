@@ -15,14 +15,15 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
     var Senate: UIButton!
     var Representative: UIButton!
     var madeBy: UILabel!
-    let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
+    let gloryRed = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
+    let gloryBlue = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
     let padding: CGFloat = 30
     let filterReuseIdentifier: String = "FilterCollectionViewCell"
     var states : [String] = []
     var districts : [String] = []
     
     var filtersArray: [Filter] = []
-    var activePartyTypeFilter: Set<PartyType> = []
+    var activePartyTypeFilter: Set<String> = []
     
     
     var filterView: UICollectionView!
@@ -147,9 +148,9 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
             ])
         NSLayoutConstraint.activate([
             filterView.heightAnchor.constraint(equalToConstant: 50),
-            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*3),
+            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             filterView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 10),
-            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*3),
+            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             ])
         
         NSLayoutConstraint.activate([
@@ -215,7 +216,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
     }
     
     func changeFilter(filter: Filter, shouldRemove: Bool = false) {
-        if let partyType = filter as? PartyType {
+        if let partyType = filter as? String {
             if shouldRemove {
                 activePartyTypeFilter.remove(partyType)
             } else {
@@ -266,15 +267,16 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
     //    }
     
 }
-extension ViewController : UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
-    }
-}
+//extension ViewController : UIViewControllerTransitioningDelegate {
+//    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+//        return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
+//    }
+//}
 
 extension ViewController: StateDelegateI{
     func stateChanged(newState: String) {
         statesButton.setTitle(newState, for: .normal)
+        NetworkManager.state = NetworkManager.usa[newState] ?? "az"
         state = newState
         print(statesButton.titleLabel)
     }

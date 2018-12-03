@@ -12,7 +12,7 @@ protocol Filter {
     var filterTitle: String { get }
 }
 
-enum PartyType: Filter {
+enum PartyType: String, Filter {
     case Democrat
     case Republican
     
@@ -22,8 +22,10 @@ enum PartyType: Filter {
     }
     
     static func allValues() -> [PartyType] {
+        
         return [.Democrat, .Republican]
     }
+    
 }
 
 

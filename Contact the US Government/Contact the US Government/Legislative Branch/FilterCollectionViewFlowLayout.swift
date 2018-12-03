@@ -21,6 +21,6 @@ class FilterCollectionViewFlowLayout: UICollectionViewFlowLayout {
         minimumLineSpacing = edgeInset
         minimumInteritemSpacing = edgeInset
         scrollDirection = .horizontal
-        sectionInset = .zero
+        sectionInset = UIEdgeInsets(top: 0.0, left: 90, bottom: 0.0, right: 90)
     }
 }

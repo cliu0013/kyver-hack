@@ -57,15 +57,15 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     }
     
     let padding: CGFloat = 50
-    let gloryBlue = UIColor.init(red: 0, green: 33.0/255, blue: 71.0/255, alpha: 1.0)
-    let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
+    let gloryRed = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
+    let gloryBlue = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
     let filterReuseIdentifier: String = "FilterCollectionViewCell"
     var pickerView: UIPickerView!
     var states : [String] = []
     var districts : [String] = []
     
     var filtersArray: [Filter] = []
-    var activePartyTypeFilter: Set<PartyType> = []
+    var activePartyTypeFilter: Set<String> = []
 
     
     
@@ -106,7 +106,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         filterView.dataSource = self
         filterView.register(FilterCollectionViewCell.self, forCellWithReuseIdentifier: filterReuseIdentifier)
         filterView.showsHorizontalScrollIndicator = false
-        filterView.backgroundColor = gloryBlue
+        filterView.backgroundColor = UIColor(red:0.74, green:0.84, blue:0.92, alpha:1.0)
         filterView.allowsMultipleSelection = true //this is how we select multiple cells at once
         view.addSubview(filterView)
         
@@ -160,9 +160,9 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         
         NSLayoutConstraint.activate([
             filterView.heightAnchor.constraint(equalToConstant: 50),
-            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*2),
+            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             filterView.topAnchor.constraint(equalTo: confirmationButton.bottomAnchor, constant: 2),
-            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*2),
+            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             ])
 
         NSLayoutConstraint.activate([
@@ -210,7 +210,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     }
     
     func changeFilter(filter: Filter, shouldRemove: Bool = false) {
-        if let partyType = filter as? PartyType {
+        if let partyType = filter as? String {
             if shouldRemove {
                 activePartyTypeFilter.remove(partyType)
             } else {

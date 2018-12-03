@@ -97,8 +97,25 @@ class SenatorsTableViewCell: UITableViewCell {
     
     func configure(for senator: Senator){
         nameLabel.text = senator.name
-        profileImage.image = UIImage(named: senator.name)
-        stateandpartyLabel.text = senator.state + " (" + senator.party + ")"
+        stateandpartyLabel.text = "New York (\(senator.party))"
+        let url = URL(string: "\(senator.photoUrl)")
+        downloadImage(from: url!)
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage(from url: URL) {
+        print("Download Started")
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                self.profileImage.image = UIImage(data: data)
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -106,8 +123,8 @@ class SenatorsTableViewCell: UITableViewCell {
     }
     
     
+    
 }
-
 
 class RepresentativesTableViewCell: UITableViewCell {
     
@@ -198,15 +215,39 @@ class RepresentativesTableViewCell: UITableViewCell {
     
     func configure(for representative: Representative){
         nameLabel.text = representative.name
-        profileImage.image = UIImage(named: representative.name)
-        stateandpartyLabel.text = representative.state + " - " + representative.district + " (" + representative.party + ")"
+        stateandpartyLabel.text = "New York (\(representative.party))"
+        let url = URL(string: "\(representative.photoUrl)")
+        downloadImage(from: url!)
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage(from url: URL) {
+        print("Download Started")
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                self.profileImage.image = UIImage(data: data)
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
 }
+
+
+
+
+
 
 class StateTableViewCell: UITableViewCell {
     var nameLabel: UILabel!
