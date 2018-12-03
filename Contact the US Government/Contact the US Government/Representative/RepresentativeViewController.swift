@@ -66,15 +66,14 @@ class RepresentativeViewController: UIViewController {
         
         phoneButton = UIButton()
         phoneButton.translatesAutoresizingMaskIntoConstraints = false
-        phoneButton.setTitle(representative.phones[0], for: .normal)
+        phoneButton.setTitle("Phone: \(representative.phones[0])", for: .normal)
         phoneButton.setTitleColor(gloryBlue, for: .normal)
-        phoneButton.titleLabel?.text = "Phone Number"
         phoneButton.addTarget(self, action: #selector(phoneCall), for: .touchUpInside)
         view.addSubview(phoneButton)
         
         websiteButton = UIButton()
         websiteButton.translatesAutoresizingMaskIntoConstraints = false
-        websiteButton.setTitle(representative.urls[0], for: .normal)
+        websiteButton.setTitle("Website(email): click to navigate", for: .normal)
         websiteButton.setTitleColor(gloryBlue, for: .normal)
         websiteButton.addTarget(self, action: #selector(websiteOpen), for: .touchUpInside)
         view.addSubview(websiteButton)

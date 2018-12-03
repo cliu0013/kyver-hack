@@ -67,14 +67,14 @@ class SenateViewController: UIViewController {
         
         phoneButton = UIButton()
         phoneButton.translatesAutoresizingMaskIntoConstraints = false
-        phoneButton.setTitle(senator.phones[0], for: .normal)
+        phoneButton.setTitle("Phone: \(senator.phones[0])", for: .normal)
         phoneButton.setTitleColor(gloryBlue, for: .normal)
         phoneButton.addTarget(self, action: #selector(phoneCall), for: .touchUpInside)
         view.addSubview(phoneButton)
         
         websiteButton = UIButton()
         websiteButton.translatesAutoresizingMaskIntoConstraints = false
-        websiteButton.setTitle(senator.urls[0], for: .normal)
+        websiteButton.setTitle("Website(email): click to navigate", for: .normal)
         websiteButton.setTitleColor(gloryBlue, for: .normal)
         websiteButton.addTarget(self, action: #selector(websiteOpen), for: .touchUpInside)
         view.addSubview(websiteButton)

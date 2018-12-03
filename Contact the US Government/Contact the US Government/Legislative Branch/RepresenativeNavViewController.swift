@@ -63,9 +63,8 @@ class RepresentativeNavViewController: UITableViewController{
         tableView.register(RepresentativesTableViewCell.self, forCellReuseIdentifier: RepCellId)
         tableView.sectionHeaderHeight = 50
         
-        representatives = []
         getRepresentatives(state: NetworkManager.state, roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
-        
+        var activeRepresentatives : [Representative] = []
         
         if(initialFilter){
             filterRepresentativesInitially(activePartyTypeFilter: activePartyTypeFilterPreference)
@@ -86,6 +85,7 @@ class RepresentativeNavViewController: UITableViewController{
     }
     func getRepresentatives(state: String, roles: String, YOUR_API_KEY: String) {
         self.representatives = []
+        NetworkManager.representativesUrl = []
         NetworkManager.getRepresentativesUrl(state: state)
         let length: Int = NetworkManager.representativesUrl.count - 1
         for i in 0...length {
@@ -154,7 +154,7 @@ class RepresentativeNavViewController: UITableViewController{
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -223,18 +223,15 @@ extension RepresentativeNavViewController: UISearchResultsUpdating {
 }
 extension RepresentativeNavViewController: RepStateDelegate{
     
-    
-    
-    
     func stateChanged(newState: String) {
         //TODO Filter that state
         var newReps: [Representative] = []
-        for representative in representatives{
+        for representative in self.representatives{
             if (representative.address[0].state == newState){
                 newReps.append(representative)
             }
         }
-        representatives = newReps
+        self.representatives = newReps
         tableView.reloadData()
     }
     

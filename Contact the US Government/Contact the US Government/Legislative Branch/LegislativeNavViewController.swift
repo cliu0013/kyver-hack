@@ -45,8 +45,8 @@ class LegislativeNavViewController: UITableViewController{
         tableView.register(SenatorsTableViewCell.self, forCellReuseIdentifier: SenCellId)
         tableView.sectionHeaderHeight = 50
         
-        getSenators(roles: "legislatorUpperBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
-        getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
+//        getSenators(roles: "legislatorUpperBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
+//        getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
     }
     
     func getSenators(roles: String, YOUR_API_KEY: String) {
