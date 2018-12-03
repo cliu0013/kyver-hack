@@ -32,6 +32,24 @@ class SenateViewController: UIViewController {
 //        var email: String
 //    }
     
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage() {
+        print("Download Started")
+        let url = URL(string: "\(senator.photoUrl)")
+        getData(from: url!) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url!.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                self.profilePhoto.image = UIImage(data: data)
+            }
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,7 +59,8 @@ class SenateViewController: UIViewController {
         
         profilePhoto = UIImageView()
         profilePhoto.translatesAutoresizingMaskIntoConstraints = false
-        profilePhoto.image = UIImage(named: senator.name)
+        profilePhoto.image = UIImage(named: "\(senator.name).jpg")
+        downloadImage()
         profilePhoto.layer.cornerRadius = 75
         profilePhoto.layer.masksToBounds = true
         view.addSubview(profilePhoto)
@@ -64,10 +83,18 @@ class SenateViewController: UIViewController {
     }
     
     @objc func phoneCall(){
+        let url = URL(string: "tel://6266161637")
+        UIApplication.shared.open (url!)
+        
+        print(senator.phones)
         
     }
     
     @objc func websiteOpen(){
+        if let url = URL(string: senator!.urls[0]),
+            UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:])
+        }
         
     }
     
