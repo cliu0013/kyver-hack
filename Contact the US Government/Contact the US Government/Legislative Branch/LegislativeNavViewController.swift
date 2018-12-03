@@ -23,8 +23,8 @@ class LegislativeNavViewController: UITableViewController{
     
     let RepCellId = "RepCellId"
     let SenCellId = "SenCellId"
-    var representatives: [Representative]!
-    var senators: [Senator]!
+    var representatives: [Representative]()
+    var senators: [Senator]()
     
     
     override func viewDidLoad() {
@@ -45,14 +45,33 @@ class LegislativeNavViewController: UITableViewController{
         tableView.register(SenatorsTableViewCell.self, forCellReuseIdentifier: SenCellId)
         tableView.sectionHeaderHeight = 50
         
-        let alexander = Senator(state: "Tennessee", _class: "class I", name: "Alexander, Lamar", party: "Republican", officeRoom: " 455 Dirksen Senate Office Building Washington DC 20510", phone: "2022244944", website: "www.alexander.senate.gov/public/index.cfm?p=Email", email:"")
-        
-        let zeldin = Representative(state: "New York", name: "Zeldin, Lee", party: "Republican", district: " 1st", officeRoom: "1517 LHOB", phone: "2022253626", website: "https://zeldin.house.gov", email:"")
-        
-        representatives = [zeldin, zeldin, zeldin, zeldin, zeldin]
-        senators = [alexander, alexander, alexander, alexander, alexander]
+        getSenators(roles: "legislatorUpperBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
+        getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
     }
     
+    func getSenators(roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getSenators(roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
+            print("TODO")
+            self.senators = senatorsArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func getRepresentatives(state: String, roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getRepresentativesUrl(state: state)
+        let length: Int = NetworkManager.representativesUrl.count - 1
+        for i in 0...length {
+            NetworkManager.getRepresentatives(i: i, roles: roles, YOUR_API_KEY: YOUR_API_KEY) { representative in
+                print("TODO")
+                self.representatives.append(representative[0])
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        
     
     func setupNavBarItems(){
         let filterButton = UIButton(type: .system)

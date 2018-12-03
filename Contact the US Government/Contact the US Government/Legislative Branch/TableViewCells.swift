@@ -97,8 +97,25 @@ class SenatorsTableViewCell: UITableViewCell {
     
     func configure(for senator: Senator){
         nameLabel.text = senator.name
-        profileImage.image = UIImage(named: senator.name)
-        stateandpartyLabel.text = senator.state + " (" + senator.party + ")"
+        stateandpartyLabel.text = "New York (\(senator.party))"
+        let url = URL(string: "\(senator.photoUrl)")
+        downloadImage(from: url!)
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage(from url: URL) {
+        print("Download Started")
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                self.profileImage.image = UIImage(data: data)
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -106,8 +123,8 @@ class SenatorsTableViewCell: UITableViewCell {
     }
     
     
+    
 }
-
 
 class RepresentativesTableViewCell: UITableViewCell {
     
@@ -198,64 +215,35 @@ class RepresentativesTableViewCell: UITableViewCell {
     
     func configure(for representative: Representative){
         nameLabel.text = representative.name
-        profileImage.image = UIImage(named: representative.name)
-        stateandpartyLabel.text = representative.state + " - " + representative.district + " (" + representative.party + ")"
+        stateandpartyLabel.text = "New York (\(representative.party))"
+        let url = URL(string: "\(representative.photoUrl)")
+        downloadImage(from: url!)
+    }
+    
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage(from url: URL) {
+        print("Download Started")
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                self.profileImage.image = UIImage(data: data)
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
     
 }
 
-class StateTableViewCell: UITableViewCell {
-    var nameLabel: UILabel!
-    var attrs = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16.0), NSAttributedString.Key.foregroundColor: UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0), NSAttributedString.Key.underlineStyle: 1] as [NSAttributedString.Key : Any]
-    
-    var attributedString = NSMutableAttributedString(string:"")
-    
-    let padding: CGFloat = 10
-    let nameLabelHeight: CGFloat = 25
-    let nameFont = UIFont(name: ".SFUIText-Medium", size: 25)
-    let contentFont = UIFont(name: ".SFUIText-Medium", size: 16)
-    let gloryBlue = UIColor.init(red: 0, green: 40.0/255, blue: 104.0/255, alpha: 1.0)
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        // TODO: Instantiate labels and imageView
-        nameLabel = UILabel()
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = nameFont
-        nameLabel.textAlignment = .left
-        nameLabel.textColor = .black
-        nameLabel.numberOfLines = 0
-        contentView.addSubview(nameLabel)
-        
-        
-        updateConstraints()
-        
-    }
-    
-    override func updateConstraints() {
-        NSLayoutConstraint.activate([
-            nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            nameLabel.heightAnchor.constraint(equalToConstant: nameLabelHeight)
-            
-            
-            ])
-        super.updateConstraints()
-        
-    }
-    
-    func configure(for state: String){
-        nameLabel.text = state
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-}
+
 
 
