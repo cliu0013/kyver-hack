@@ -7,14 +7,32 @@
 //
 
 import UIKit
-
-class ViewController: UIViewController {
+protocol StateDelegateI: class {
+    func stateChanged(newState: String)
+}
+class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionViewDataSource{
     
     var Senate: UIButton!
     var Representative: UIButton!
     var madeBy: UILabel!
     let gloryRed = UIColor.init(red: 187.0/255, green: 19.0/255, blue: 62.0/255, alpha: 1.0)
     let padding: CGFloat = 30
+    let filterReuseIdentifier: String = "FilterCollectionViewCell"
+    var states : [String] = []
+    var districts : [String] = []
+    
+    var filtersArray: [Filter] = []
+    var activePartyTypeFilter: Set<PartyType> = []
+    
+    
+    var filterView: UICollectionView!
+    var confirmationButton: UIButton!
+    var statesButton: UIButton!
+    var initialSenatorFilter: Bool = false
+    var initialRepresentativeFilter: Bool = false
+    var state: String = ""
+    weak var delegate: StateDelegate?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +51,6 @@ class ViewController: UIViewController {
         Senate.layer.cornerRadius = 20
         Senate.clipsToBounds = true
         Senate.setBackgroundImage(UIImage(named: "Possible app icon"), for: .normal)
-        //Senate.backgroundColor = .blue
         Senate.translatesAutoresizingMaskIntoConstraints = false
         Senate.setTitle("Senate", for: .normal)
         Senate.setTitleColor(.black, for: .normal)
@@ -48,7 +65,6 @@ class ViewController: UIViewController {
         Representative.layer.cornerRadius = 20
         Representative.clipsToBounds = true
         Representative.setBackgroundImage(UIImage(named: "Red Bird"), for: .normal)
-        //Representative.backgroundColor = .blue
         Representative.translatesAutoresizingMaskIntoConstraints = false
         Representative.setTitle("Representative", for: .normal)
         Representative.setTitleColor(.black, for: .normal)
@@ -65,56 +81,147 @@ class ViewController: UIViewController {
         madeBy.font = UIFont(name: ".SFUIText-Medium", size: 10)
         madeBy.textAlignment = .center
         madeBy.textColor = .darkGray
-        //madeBy.backgroundColor = .green
         madeBy.numberOfLines = 6
         view.addSubview(madeBy)
+        
+        filtersArray.append(contentsOf: PartyType.allValues().map({ f in f as Filter }))
+        
+        filterView = UICollectionView(frame: .zero, collectionViewLayout: FilterCollectionViewFlowLayout())
+        filterView.translatesAutoresizingMaskIntoConstraints = false
+        filterView.delegate = self
+        filterView.dataSource = self
+        filterView.register(FilterCollectionViewCell.self, forCellWithReuseIdentifier: filterReuseIdentifier)
+        filterView.showsHorizontalScrollIndicator = false
+        //filterView.backgroundColor = gloryBlue
+        filterView.allowsMultipleSelection = true //this is how we select multiple cells at once
+        view.addSubview(filterView)
+        
+        statesButton = UIButton()
+        statesButton.translatesAutoresizingMaskIntoConstraints = false
+        statesButton.backgroundColor = .white
+        statesButton.setTitle("Choose State", for: .normal)
+        statesButton.addTarget(self, action: #selector(presentStatesPopupModalViewController), for: .touchUpInside)
+        statesButton.contentHorizontalAlignment = .center
+        statesButton.titleLabel?.font =  .systemFont(ofSize: 15)
+        statesButton.layer.cornerRadius = 5
+        statesButton.setTitleColor(.darkGray, for: .normal)
+        view.addSubview(statesButton)
+        
+        
         setupConstraints()
     }
     
     func setupConstraints(){
         NSLayoutConstraint.activate([
-            //Senate.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             Senate.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             Senate.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: padding),
-            //            Senate.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding*5),
-            //            Senate.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: padding*2),
-            //            Senate.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -padding*2),
             Senate.widthAnchor.constraint(equalToConstant: 300-padding),
             Senate.heightAnchor.constraint(equalToConstant: 225-padding)
             ])
         
         NSLayoutConstraint.activate([
-            //Representative.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+
             Representative.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             Representative.topAnchor.constraint(equalTo: Senate.bottomAnchor, constant: padding),
-            //            Representative.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding*5),
-            //            Representative.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: padding*2),
-            //            Representative.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -padding*2),
             Representative.widthAnchor.constraint(equalToConstant: 300-padding),
             Representative.heightAnchor.constraint(equalToConstant: 225-padding)
             ])
         NSLayoutConstraint.activate([
             madeBy.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            //madeBy.topAnchor.constraint(equalTo: Representative.bottomAnchor, constant: padding),
             madeBy.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -padding),
-            //            madeBy.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: padding*2),
-            //            madeBy.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -padding*2),
-            //madeBy.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 100)
             ])
+        NSLayoutConstraint.activate([
+            filterView.heightAnchor.constraint(equalToConstant: 50),
+            filterView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding*2),
+            filterView.topAnchor.constraint(equalTo: Representative.bottomAnchor, constant: padding),
+            filterView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*2),
+            ])
+    
     }
     
-    @objc func pushLegislativeNavViewController(){
-        let navViewController = LegislativeNavViewController()
-        navigationController?.pushViewController(navViewController, animated: true)
-    }
     
     @objc func pushSenateNavViewController(){
         let navViewController = SenateNavViewController()
+        navViewController.activePartyTypeFilterPreference = activePartyTypeFilter
+        navViewController.initialFilter = initialSenatorFilter
+        navViewController.state = state
         navigationController?.pushViewController(navViewController, animated: true)
     }
     @objc func pushRepresentativeNavViewController(){
         let navViewController = RepresentativeNavViewController()
+        navViewController.activePartyTypeFilterPreference = activePartyTypeFilter
+        navViewController.initialFilter = initialRepresentativeFilter
+        navViewController.state = state
         navigationController?.pushViewController(navViewController, animated: true)
+    }
+    
+    @objc func presentStatesPopupModalViewController(){
+        let modalViewController = StatesPopopModalViewController()
+        //modalViewController.modalPresentationStyle = .custom
+        //modalViewController.transitioningDelegate = self
+        modalViewController.modalTransitionStyle = .crossDissolve
+        modalViewController.delegate = self as! StateDelegateI
+        present(modalViewController, animated: true, completion: nil)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return filtersArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return UICollectionViewCell() }
+        let filter = filtersArray[indexPath.item]
+        cell.setup(with: filter.filterTitle)
+        return cell
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return }
+        let currentFilter = filtersArray[indexPath.item]
+        changeFilter(filter: currentFilter, shouldRemove: false)
+        //       Code fo
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: filterReuseIdentifier, for: indexPath) as? FilterCollectionViewCell else { return }
+        let currentFilter = filtersArray[indexPath.item]
+        changeFilter(filter: currentFilter, shouldRemove: true)
+        //        displayDelegatesCollectionView.reloadData()
+    }
+    
+    func changeFilter(filter: Filter, shouldRemove: Bool = false) {
+        if let partyType = filter as? PartyType {
+            if shouldRemove {
+                activePartyTypeFilter.remove(partyType)
+            } else {
+                activePartyTypeFilter.insert(partyType)
+            }
+        }
+        filterRepresentativesInitially()
+        filterSenatorsInitially()
+    }
+    
+    func filterSenatorsInitially() {
+        if activePartyTypeFilter.count == 0{
+            initialSenatorFilter = false
+            return
+        }else {
+            initialSenatorFilter = true
+            return
+        }
+    }
+    
+    
+    func filterRepresentativesInitially(){
+        if activePartyTypeFilter.count == 0{
+            initialRepresentativeFilter = false
+            return
+        }else {
+            initialRepresentativeFilter = true
+            return
+        }
     }
     
     //    func setupNavBarItems(){
@@ -141,4 +248,13 @@ extension ViewController : UIViewControllerTransitioningDelegate {
         return HalfSizePresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
+
+extension ViewController: StateDelegateI{
+    func stateChanged(newState: String) {
+        statesButton.setTitle(newState, for: .normal)
+        state = newState
+        print(statesButton.titleLabel)
+    }
+}
+
 

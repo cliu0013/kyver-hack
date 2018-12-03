@@ -37,6 +37,9 @@ class SenateNavViewController: UITableViewController{
     let searchController = UISearchController(searchResultsController: nil)
     var activeSenators : [Senator] = []
     var searchedSenators = [Senator]()
+    var initialFilter: Bool!
+    var activePartyTypeFilterPreference: Set<PartyType>!
+    var state: String!
     
     
     override func viewDidLoad() {
@@ -73,6 +76,13 @@ class SenateNavViewController: UITableViewController{
         senators = [colorado, alexander, colorado, alexander, alexander]
         activeSenators = senators
         
+        if(initialFilter){
+            filterSenatorsInitially(activePartyTypeFilter: activePartyTypeFilterPreference)
+        }
+        if(state != ""){
+            filterSenatorsInitiallyByState(state: state)
+        }
+        
         
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         //always fill the view
@@ -80,6 +90,33 @@ class SenateNavViewController: UITableViewController{
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurEffectView.isHidden = true
         view.addSubview(blurEffectView) //if you have more UIViews, use an insertSubview API to place it where needed
+    }
+    
+    func filterSenatorsInitially(activePartyTypeFilter: Set<PartyType>){
+        if activePartyTypeFilter.count == 0{
+            activeSenators = senators
+            return
+        }
+        activeSenators = senators.filter({ r in
+            var partyTypeFilteredOut = activePartyTypeFilter.count > 0
+            if activePartyTypeFilter.count > 0 {
+                if activePartyTypeFilter.contains(r.convertToPartyType(party: r.party)) {
+                    partyTypeFilteredOut = false
+                }
+            }
+            return !partyTypeFilteredOut
+        })
+        senators = activeSenators
+    }
+    
+    func filterSenatorsInitiallyByState(state: String){
+        var newSenators: [Senator] = []
+        for senator in senators{
+            if (senator.state == state){
+                newSenators.append(senator)
+            }
+        }
+        senators = newSenators
     }
     
     
@@ -214,6 +251,7 @@ extension SenateNavViewController: StateDelegate{
             }
             return !partyTypeFilteredOut
         })
+        senators = activeSenators
         tableView.reloadData()
     }
     

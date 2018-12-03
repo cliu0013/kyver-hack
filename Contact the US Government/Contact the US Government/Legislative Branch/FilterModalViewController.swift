@@ -66,11 +66,11 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     
     var filtersArray: [Filter] = []
     var activePartyTypeFilter: Set<PartyType> = []
+
     
     
     var filterView: UICollectionView!
     var confirmationButton: UIButton!
-    var statesButton: UIButton!
     var dimView : UIView!
     weak var delegate: StateDelegate?
     weak var dismissDelegate: DismissDelegate?
@@ -110,16 +110,7 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         filterView.allowsMultipleSelection = true //this is how we select multiple cells at once
         view.addSubview(filterView)
         
-//        statesButton = UIButton()
-//        statesButton.translatesAutoresizingMaskIntoConstraints = false
-//        statesButton.backgroundColor = .white
-//        statesButton.setTitle("Choose State", for: .normal)
-//        statesButton.addTarget(self, action: #selector(presentStatesPopupModalViewController), for: .touchUpInside)
-//        statesButton.contentHorizontalAlignment = .center
-//        statesButton.titleLabel?.font =  .systemFont(ofSize: 15)
-//        statesButton.layer.cornerRadius = 5
-//        statesButton.setTitleColor(.darkGray, for: .normal)
-        //view.addSubview(statesButton)
+
         
         dimView = UIView()
         dimView.translatesAutoresizingMaskIntoConstraints = false
@@ -196,14 +187,6 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
     }
     
     
-//    @objc func presentStatesPopupModalViewController(){
-//        let modalViewController = StatesPopopModalViewController()
-//        //modalViewController.modalPresentationStyle = .custom
-//        //modalViewController.transitioningDelegate = self
-//        modalViewController.modalTransitionStyle = .crossDissolve
-//        modalViewController.delegate = self as! StateDelegate
-//        present(modalViewController, animated: true, completion: nil)
-//    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filtersArray.count
     }
