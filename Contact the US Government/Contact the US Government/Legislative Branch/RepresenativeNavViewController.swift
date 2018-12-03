@@ -173,6 +173,7 @@ class RepresentativeNavViewController: UITableViewController{
             representative = representatives[indexPath.row]
         }
         cell.configure(for: representative)
+        cell.stateandpartyLabel.text = cell.stateandpartyLabel.text! + "district \(indexPath.row + 1)"
         cell.setNeedsUpdateConstraints()
         cell.selectionStyle = .none
         cell.backgroundColor = .white

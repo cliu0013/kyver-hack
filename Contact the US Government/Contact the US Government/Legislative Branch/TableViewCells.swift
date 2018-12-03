@@ -220,6 +220,7 @@ class RepresentativesTableViewCell: UITableViewCell {
         stateandpartyLabel.text = "\(state!) (\(representative.party))"
         let url = URL(string: "\(representative.photoUrl)")
         downloadImage(from: url!)
+        
     }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
