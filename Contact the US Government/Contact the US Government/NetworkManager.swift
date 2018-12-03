@@ -118,15 +118,67 @@ class NetworkManager {
         "Utah":"ut",
         "Virginia":"va",
         "Vermont":"vt"
+    ]
+    
+    public static let usaReverse = [
+        "al":"Alabama",
+        "ak":"Alaska",
+        "az":"Arizona",
+        "ar":"Arkansas",
+        "ca":"California",
+        "co":"Colorado",
+        "ct":"Connecticut",
+        "de":"Deleware",
+        "fl":"Florida",
+        "ga":"Georgia",
+        "hi":"Hawaii",
+        "id":"Idaho",
+        "in":"Indiana",
+        "il":"Illinois",
+        "ia":"Iowa",
+        "ks":"Kansas",
+        "ky":"Kentucky",
+        "la":"Louisiana",
+        "mi":"Michigan",
+        "md":"Maryland",
+        "mn":"Minnesota",
+        "mo":"Missouri",
+        "mt":"Montana",
+        "me":"Maine",
+        "ma":"Massachusetts",
+        "ms":"Mississippi",
+        "nh":"New Hampshire",
+        "ny":"New York",
+        "nj":"New Jersey",
+        "nd":"North Dakota",
+        "ne":"Nebraska",
+        "nv":"Nevada",
+        "nm":"New Mexico",
+        "nc":"North Carolina",
+        "ok":"Oklahoma",
+        "or":"Oregon",
+        "oh":"Ohio",
+        "pa":"Pennsylvania",
+        "ri":"Rhode Island",
+        "sd":"South Dakota",
+        "sc":"South Carolina",
+        "tn":"Tennessee",
+        "tx":"Texas",
+        "wv":"West Virginia",
+        "wi":"Wisconsin",
+        "wy":"Wyoming",
+        "wa":"Washington",
+        "ut":"Utah",
+        "va":"Virginia",
+        "vt":"Vermont"
         
         
     ]
     
     
+    public static var state: String = "vt"
     
-    public static var state: String = "nc"
-    
-    private static let senatorUrl = "https://www.googleapis.com/civicinfo/v2/representatives/ocd-division%2Fcountry%3Aus%2Fstate%3A\(state)"
+    private static var senatorUrl = "https://www.googleapis.com/civicinfo/v2/representatives/ocd-division%2Fcountry%3Aus%2Fstate%3A\(state)"
     
     public static var representativesUrl = [String]()
     
@@ -139,11 +191,12 @@ class NetworkManager {
         }
     }
     
-    static func getSenators(roles: String, YOUR_API_KEY: String, completion: @escaping ([Senator]) -> Void) {
+    static func getSenators(state: String, roles: String, YOUR_API_KEY: String, completion: @escaping ([Senator]) -> Void) {
         let parameters: [String: Any] = [
             "roles": roles,
             "key": YOUR_API_KEY
         ]
+        senatorUrl = "https://www.googleapis.com/civicinfo/v2/representatives/ocd-division%2Fcountry%3Aus%2Fstate%3A\(state)"
         Alamofire.request(senatorUrl, method: .get, parameters: parameters).validate().responseData { (response) in
             switch response.result {
             case .success(let data):

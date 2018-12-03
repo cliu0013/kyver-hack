@@ -52,7 +52,8 @@ class RepresentativeNavViewController: UITableViewController{
         navigationController?.navigationBar.barTintColor = gloryRed
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
-        edgesForExtendedLayout = [] // gets rid of views going under navigation controller
+        edgesForExtendedLayout = []
+
         setupNavBarItems()
         
         searchController.searchResultsUpdater = self
@@ -62,8 +63,8 @@ class RepresentativeNavViewController: UITableViewController{
         tableView.register(RepresentativesTableViewCell.self, forCellReuseIdentifier: RepCellId)
         tableView.sectionHeaderHeight = 50
         
-        
-        getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
+        representatives = []
+        getRepresentatives(state: NetworkManager.state, roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
         
         
         if(initialFilter){
@@ -84,6 +85,7 @@ class RepresentativeNavViewController: UITableViewController{
         
     }
     func getRepresentatives(state: String, roles: String, YOUR_API_KEY: String) {
+        self.representatives = []
         NetworkManager.getRepresentativesUrl(state: state)
         let length: Int = NetworkManager.representativesUrl.count - 1
         for i in 0...length {
@@ -123,7 +125,6 @@ class RepresentativeNavViewController: UITableViewController{
         }
         representatives = newReps
     }
-    
     
     func setupNavBarItems(){
         let filterButton = UIButton(type: .system)

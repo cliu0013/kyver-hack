@@ -118,15 +118,58 @@ class FilterModalViewController: UIViewController, UICollectionViewDelegate,  UI
         dimView.isHidden = true
         view.addSubview(dimView)
         
-        let Alabama = "Alabama"
-        let Alaska = "Alaska"
-        let Arizona = "Arkansas"
-        let California = "California"
-        let Colorado = "Colorado"
-        let newYork = "New York"
-        let tennessee = "Tennessee"
-        
-        states = [Alabama, Alaska, Arizona, California, Colorado, newYork, tennessee]
+        states = [
+            "Alabama",
+            "Alaska",
+            "Arizona",
+            "Arkansas",
+            "California",
+            "Colorado",
+            "Connecticut",
+            "Deleware",
+            "Florida",
+            "Georgia",
+            "Hawaii",
+            "Idaho",
+            "Indiana",
+            "Illinois",
+            "Iowa",
+            "Kansas",
+            "Kentucky",
+            "Louisiana",
+            "Michigan",
+            "Maryland",
+            "Minnesota",
+            "Missouri",
+            "Montana",
+            "Maine",
+            "Massachusetts",
+            "Mississippi",
+            "New Hampshire",
+            "New York",
+            "New Jersey",
+            "North Dakota",
+            "Nebraska",
+            "Nevada",
+            "New Mexico",
+            "North Carolina",
+            "Oklahoma",
+            "Oregon",
+            "Ohio",
+            "Pennsylvania",
+            "Rhode Island",
+            "South Dakota",
+            "South Carolina",
+            "Tennessee",
+            "Texas",
+            "West Virginia",
+            "Wisconsin",
+            "Wyoming",
+            "Washington",
+            "Utah",
+            "Virginia",
+            "Vermont"
+        ]
         
         let first = "1st"
         let second = "2nd"

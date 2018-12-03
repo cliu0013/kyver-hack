@@ -97,7 +97,8 @@ class SenatorsTableViewCell: UITableViewCell {
     
     func configure(for senator: Senator){
         nameLabel.text = senator.name
-        stateandpartyLabel.text = "New York (\(senator.party))"
+        let state = NetworkManager.usaReverse[NetworkManager.state]
+        stateandpartyLabel.text = "\(state!) (\(senator.party))"
         let url = URL(string: "\(senator.photoUrl)")
         downloadImage(from: url!)
     }
@@ -215,7 +216,8 @@ class RepresentativesTableViewCell: UITableViewCell {
     
     func configure(for representative: Representative){
         nameLabel.text = representative.name
-        stateandpartyLabel.text = "New York (\(representative.party))"
+        let state = NetworkManager.usaReverse[NetworkManager.state]
+        stateandpartyLabel.text = "\(state!) (\(representative.party))"
         let url = URL(string: "\(representative.photoUrl)")
         downloadImage(from: url!)
     }

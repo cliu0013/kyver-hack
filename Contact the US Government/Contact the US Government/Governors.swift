@@ -1,13 +1,13 @@
 import Foundation
 
 struct Representative: Codable {
-    var address: [Address]
-    var channels: [Channel]
+    var address: [Address] = []
+    var channels: [Channel] = []
     var name: String
     var party: String
-    var phones: [String]
-    var photoUrl: String
-    var urls: [String]
+    var phones: [String] = []
+    var photoUrl: String = "https://newmusicshelf.com/wp-content/uploads/blank-profile-picture.png"
+    var urls: [String] = []
 }
 
 struct RepresentativeResponse: Codable {
@@ -15,13 +15,13 @@ struct RepresentativeResponse: Codable {
 }
 
 struct Senator: Codable {
-    var address: [Address]
-    var channels: [Channel]
+    var address: [Address] = []
+    var channels: [Channel] = []
     var name: String
     var party: String
-    var phones: [String]
-    var photoUrl: String
-    var urls: [String]
+    var phones: [String] = []
+    var photoUrl: String = "https://newmusicshelf.com/wp-content/uploads/blank-profile-picture.png"
+    var urls: [String] = []
 }
 
 struct SenatorResponse: Codable {

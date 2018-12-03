@@ -50,7 +50,7 @@ class LegislativeNavViewController: UITableViewController{
     }
     
     func getSenators(roles: String, YOUR_API_KEY: String) {
-        NetworkManager.getSenators(roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
+        NetworkManager.getSenators(state: NetworkManager.state, roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
             print("TODO")
             self.senators = senatorsArray
             DispatchQueue.main.async {

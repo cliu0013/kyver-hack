@@ -176,6 +176,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
         navViewController.activePartyTypeFilterPreference = activePartyTypeFilter
         navViewController.initialFilter = initialRepresentativeFilter
         navViewController.state = state
+        navViewController.representatives = []
         navigationController?.pushViewController(navViewController, animated: true)
     }
     

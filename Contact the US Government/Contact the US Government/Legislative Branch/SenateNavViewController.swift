@@ -119,7 +119,8 @@ class SenateNavViewController: UITableViewController{
     }
     
     func getSenators(roles: String, YOUR_API_KEY: String) {
-        NetworkManager.getSenators(roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
+        self.senators = []
+        NetworkManager.getSenators(state: NetworkManager.state, roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
             print("TODO")
             self.senators = senatorsArray
             DispatchQueue.main.async {
@@ -160,7 +161,7 @@ class SenateNavViewController: UITableViewController{
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
