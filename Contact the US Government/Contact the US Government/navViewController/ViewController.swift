@@ -34,7 +34,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
     var state: String = ""
     weak var delegate: StateDelegate?
     var preferencesLabel: UILabel!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,7 +132,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
             ])
         
         NSLayoutConstraint.activate([
-
+            
             Representative.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             Representative.topAnchor.constraint(equalTo: Senate.bottomAnchor, constant: padding),
             Representative.widthAnchor.constraint(equalToConstant: 300-padding),
@@ -159,8 +159,8 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
             statesButton.topAnchor.constraint(equalTo:  filterView.bottomAnchor, constant: 10),
             statesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding*3),
             ])
-
-    
+        
+        
     }
     
     
@@ -187,7 +187,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,  UICollectionV
         modalViewController.delegate = self as! StateDelegateI
         present(modalViewController, animated: true, completion: nil)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filtersArray.count
     }

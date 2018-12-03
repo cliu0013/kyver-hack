@@ -215,10 +215,10 @@ class SenateNavViewController: UITableViewController{
         searchedSenators = senators.filter({( senator : Senator) -> Bool in
             return senator.name.lowercased().contains(searchText.lowercased())
         })
-
+        
         tableView.reloadData()
     }
-
+    
     
     
 }
@@ -267,7 +267,7 @@ extension SenateNavViewController: StateDelegate{
     func isFiltering() -> Bool {
         return searchController.isActive && !searchBarIsEmpty()
     }
-
+    
 }
 
 extension SenateNavViewController: DismissDelegate{

@@ -42,7 +42,7 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
     let reuseIdentifier = "stateCellReuse"
     let cellHeight: CGFloat = 30
     
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,14 +53,14 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
         view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
         
-//        dimView = UIView()
-//        dimView.translatesAutoresizingMaskIntoConstraints = false
-//        dimView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-//        dimView.isHidden = true
-//        view.addSubview(dimView)
+        //        dimView = UIView()
+        //        dimView.translatesAutoresizingMaskIntoConstraints = false
+        //        dimView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        //        dimView.isHidden = true
+        //        view.addSubview(dimView)
         
         
-       
+        
         
         states = [
             "Alabama",
@@ -115,8 +115,8 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
             "Vermont"
             
             
-            ]
-
+        ]
+        
         
         pickerView = UIPickerView(frame: .zero)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -146,12 +146,12 @@ class StatesPopopModalViewController: UIViewController, UIPickerViewDataSource, 
             pickerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height/2.5)
             ])
         
-//        NSLayoutConstraint.activate([
-//            dimView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//            dimView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            dimView.topAnchor.constraint(equalTo:  view.topAnchor),
-//            dimView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-//            ])
+        //        NSLayoutConstraint.activate([
+        //            dimView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        //            dimView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        //            dimView.topAnchor.constraint(equalTo:  view.topAnchor),
+        //            dimView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        //            ])
         
         //viewBoundaries = CGRect(x: theView.bounds.width/6, y: theView.bounds.height/5, width: (2*theView.bounds.width)/3, height: (1*theView.bounds.height)/2)
     }

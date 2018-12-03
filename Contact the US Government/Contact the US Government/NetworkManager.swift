@@ -67,10 +67,66 @@ class NetworkManager {
         "vt":"1"
     ]
     
+    public static let usa = [
+        "Alabama":"al",
+        "Alaska":"ak",
+        "Arizona":"az",
+        "Arkansas":"ar",
+        "California":"ca",
+        "Colorado":"co",
+        "Connecticut":"ct",
+        "Deleware":"de",
+        "Florida":"fl",
+        "Georgia":"ga",
+        "Hawaii":"hi",
+        "Idaho":"id",
+        "Indiana":"in",
+        "Illinois":"il",
+        "Iowa":"ia",
+        "Kansas":"ks",
+        "Kentucky":"ky",
+        "Louisiana":"la",
+        "Michigan":"mi",
+        "Maryland":"md",
+        "Minnesota":"mn",
+        "Missouri":"mo",
+        "Montana":"mt",
+        "Maine":"me",
+        "Massachusetts":"ma",
+        "Mississippi":"ms",
+        "New Hampshire":"nh",
+        "New York":"ny",
+        "New Jersey":"nj",
+        "North Dakota":"nd",
+        "Nebraska":"ne",
+        "Nevada":"nv",
+        "New Mexico":"nm",
+        "North Carolina":"nc",
+        "Oklahoma":"ok",
+        "Oregon":"or",
+        "Ohio":"oh",
+        "Pennsylvania":"pa",
+        "Rhode Island":"ri",
+        "South Dakota":"sd",
+        "South Carolina":"sc",
+        "Tennessee":"tn",
+        "Texas":"tx",
+        "West Virginia":"wv",
+        "Wisconsin":"wi",
+        "Wyoming":"wy",
+        "Washington":"wa",
+        "Utah":"ut",
+        "Virginia":"va",
+        "Vermont":"vt"
+        
+        
+    ]
     
-    private static let state: String = "ny"
     
-    private static let senatorUrl = "https://www.googleapis.com/civicinfo/v2/representatives/ocd-division%2Fcountry%3Aus%2Fstate%3Any"
+    
+    public static var state: String = "nc"
+    
+    private static let senatorUrl = "https://www.googleapis.com/civicinfo/v2/representatives/ocd-division%2Fcountry%3Aus%2Fstate%3A\(state)"
     
     public static var representativesUrl = [String]()
     
@@ -82,7 +138,7 @@ class NetworkManager {
             representativesUrl.append(representativeUrl)
         }
     }
-
+    
     static func getSenators(roles: String, YOUR_API_KEY: String, completion: @escaping ([Senator]) -> Void) {
         let parameters: [String: Any] = [
             "roles": roles,
@@ -129,6 +185,6 @@ class NetworkManager {
         }
     }
     
-
+    
     
 }

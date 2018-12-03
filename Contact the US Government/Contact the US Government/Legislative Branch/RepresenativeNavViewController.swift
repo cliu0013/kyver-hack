@@ -28,7 +28,7 @@ class RepresentativeNavViewController: UITableViewController{
     let gloryRed = UIColor(red:1.00, green:0.37, blue:0.33, alpha:1.0)
     let gloryBlue = UIColor(red:0.21, green:0.51, blue:0.72, alpha:1.0)
     let blurEffect = UIBlurEffect(style: .dark)
-
+    
     
     let RepCellId = "RepCellId"
     
@@ -36,7 +36,7 @@ class RepresentativeNavViewController: UITableViewController{
     var blurEffectView : UIVisualEffectView!
     var searchBar: UISearchBar!
     let searchController = UISearchController(searchResultsController: nil)
-
+    
     var activeRepresentatives : [Representative] = []
     var searchedRepresentatives = [Representative]()
     var initialFilter: Bool!
@@ -221,7 +221,7 @@ extension RepresentativeNavViewController: UISearchResultsUpdating {
     }
 }
 extension RepresentativeNavViewController: RepStateDelegate{
-
+    
     
     
     
@@ -238,14 +238,14 @@ extension RepresentativeNavViewController: RepStateDelegate{
     }
     
     func districtChanged(newDistrict: String) {
-//        var newReps: [Representative] = []
-//        for representative in representatives{
-//            if (representative.district == newDistrict){
-//                newReps.append(representative)
-//            }
-//        }
-//        representatives = newReps
-//        tableView.reloadData()
+        //        var newReps: [Representative] = []
+        //        for representative in representatives{
+        //            if (representative.district == newDistrict){
+        //                newReps.append(representative)
+        //            }
+        //        }
+        //        representatives = newReps
+        //        tableView.reloadData()
     }
     
     func filterRepresentatives(activePartyTypeFilter: Set<String>) {
