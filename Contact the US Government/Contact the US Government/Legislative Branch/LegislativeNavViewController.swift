@@ -47,6 +47,30 @@ class LegislativeNavViewController: UITableViewController{
         
         getSenators(roles: "legislatorUpperBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
         getRepresentatives(state: "ny", roles: "legislatorLowerBody", YOUR_API_KEY: "AIzaSyCNrilf9OFSEvR3MZeO7-HeV5GGyjBcLic")
+    }
+    
+    func getSenators(roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getSenators(roles: roles, YOUR_API_KEY: YOUR_API_KEY) { senatorsArray in
+            print("TODO")
+            self.senators = senatorsArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func getRepresentatives(state: String, roles: String, YOUR_API_KEY: String) {
+        NetworkManager.getRepresentativesUrl(state: state)
+        let length: Int = NetworkManager.representativesUrl.count - 1
+        for i in 0...length {
+            NetworkManager.getRepresentatives(i: i, roles: roles, YOUR_API_KEY: YOUR_API_KEY) { representative in
+                print("TODO")
+                self.representatives.append(representative[0])
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
         
     }
     

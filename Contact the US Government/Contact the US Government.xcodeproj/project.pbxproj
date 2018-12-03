@@ -11,7 +11,6 @@
 		8E7D25BE21AF1E1F00768A73 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */; };
 		8E7D25C021AF1E5F00768A73 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7D25BF21AF1E5E00768A73 /* Filter.swift */; };
 		8EA73CDF21B06C7B00CA3537 /* StatesPopupModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CDE21B06C7B00CA3537 /* StatesPopupModalViewController.swift */; };
-		8EA73CE721B367ED00CA3537 /* NetworkManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CE621B367EC00CA3537 /* NetworkManagement.swift */; };
 		8EA73CE921B3693400CA3537 /* RepresenativeNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CE821B3693400CA3537 /* RepresenativeNavViewController.swift */; };
 		8EA73CEB21B3695200CA3537 /* SenateNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA73CEA21B3695200CA3537 /* SenateNavViewController.swift */; };
 		B73AE7DE4B90D70398B6CC66 /* Pods_Contact_the_US_Government.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0918E57025943E25A1E7F32 /* Pods_Contact_the_US_Government.framework */; };
@@ -26,6 +25,7 @@
 		D65F996621AD1F6C007F1545 /* TableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F996521AD1F6C007F1545 /* TableViewCells.swift */; };
 		D65F996821ADE112007F1545 /* SenateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F996721ADE112007F1545 /* SenateViewController.swift */; };
 		D65F996A21ADE11D007F1545 /* RepresentativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65F996921ADE11D007F1545 /* RepresentativeViewController.swift */; };
+		D6FFA26921B4E34700205751 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FFA26821B4E34700205751 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +34,6 @@
 		8E7D25BD21AF1E1F00768A73 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		8E7D25BF21AF1E5E00768A73 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		8EA73CDE21B06C7B00CA3537 /* StatesPopupModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesPopupModalViewController.swift; sourceTree = "<group>"; };
-		8EA73CE621B367EC00CA3537 /* NetworkManagement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManagement.swift; sourceTree = "<group>"; };
 		8EA73CE821B3693400CA3537 /* RepresenativeNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresenativeNavViewController.swift; sourceTree = "<group>"; };
 		8EA73CEA21B3695200CA3537 /* SenateNavViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenateNavViewController.swift; sourceTree = "<group>"; };
 		A0918E57025943E25A1E7F32 /* Pods_Contact_the_US_Government.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Contact_the_US_Government.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +50,7 @@
 		D65F996521AD1F6C007F1545 /* TableViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCells.swift; sourceTree = "<group>"; };
 		D65F996721ADE112007F1545 /* SenateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenateViewController.swift; sourceTree = "<group>"; };
 		D65F996921ADE11D007F1545 /* RepresentativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentativeViewController.swift; sourceTree = "<group>"; };
+		D6FFA26821B4E34700205751 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		DCBF5B72406718321D53E6DD /* Pods-Contact the US Government.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contact the US Government.release.xcconfig"; path = "Pods/Target Support Files/Pods-Contact the US Government/Pods-Contact the US Government.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				D65F994521AC71D7007F1545 /* AppDelegate.swift */,
-				8EA73CE621B367EC00CA3537 /* NetworkManagement.swift */,
+				D6FFA26821B4E34700205751 /* NetworkManager.swift */,
 				D65F996321AD0F48007F1545 /* Governors.swift */,
 				D6E5946C21AE2A7600670C2A /* navViewController */,
 				D6E5946E21AE2ABB00670C2A /* Legislative Branch */,
@@ -285,6 +285,7 @@
 				8E7D25BE21AF1E1F00768A73 /* FilterCollectionViewCell.swift in Sources */,
 				D65F994821AC71D7007F1545 /* ViewController.swift in Sources */,
 				8E7D25C021AF1E5F00768A73 /* Filter.swift in Sources */,
+				D6FFA26921B4E34700205751 /* NetworkManager.swift in Sources */,
 				D65F996A21ADE11D007F1545 /* RepresentativeViewController.swift in Sources */,
 				D65F996621AD1F6C007F1545 /* TableViewCells.swift in Sources */,
 				D65F994621AC71D7007F1545 /* AppDelegate.swift in Sources */,
@@ -292,7 +293,6 @@
 				D65F996821ADE112007F1545 /* SenateViewController.swift in Sources */,
 				8EA73CDF21B06C7B00CA3537 /* StatesPopupModalViewController.swift in Sources */,
 				D65F995A21ACE455007F1545 /* LegislativeNavViewController.swift in Sources */,
-				8EA73CE721B367ED00CA3537 /* NetworkManagement.swift in Sources */,
 				D65F996421AD0F48007F1545 /* Governors.swift in Sources */,
 				D65F995821AC7B25007F1545 /* FilterModalViewController.swift in Sources */,
 				8E7D25BC21AF1DE900768A73 /* FilterCollectionViewFlowLayout.swift in Sources */,
