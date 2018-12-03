@@ -1,4 +1,4 @@
-# App Kyver
+# Kyver
 Tapline: Kyver is an app that enables you search and contact a senator or representative of the United States.
 
 IOS repo link: https://github.com/lcj420106/hackChallengeUSGov 
