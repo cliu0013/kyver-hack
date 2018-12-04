@@ -12,7 +12,7 @@ https://github.com/lcj420106/hackChallengeUSGov/tree/master/Screenshots
 ![alt text](https://raw.githubusercontent.com/lcj420106/hackChallengeUSGov/master/Screenshots/link%20to%20web.png)
 
 
-Description: ViewController has state filters and let the users to chooise between the legislative lower body and the legislative upper body. Features include filter through districts and party. By clicking on the table view cell, the users could get the details of the governor, such as his or her personal url, phone number, profile photos, address, and social media number. The users are able to contact the governor by clicking on the personal url to send emails, and click the phone number to call. There is a filter button to get the governors with specific district and party chosen. We integrate the Google Civic Information API to get all of the information of the senators and representatives of the United States.
+Description: ViewController has state filters and let the users to choose between the legislative lower body and the legislative upper body. Features include filter through districts and party. By clicking on the table view cell, the users could get the details of the governor, such as his or her personal url, phone number, profile photos, address, and social media. The users are able to contact the governor by clicking on the personal url to send emails, and click the phone number to call. There is a filter button to get the governors with specific district and party chosen. We integrate the Google Civic Information API to get all of the information of the senators and representatives of the United States.
 
 IOS Requirement:
 1. UI is workable. Integrated the Google Civic Information API.
